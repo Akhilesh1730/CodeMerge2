@@ -1,0 +1,12 @@
+<androidx.appcompat.widget.Toolbar
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/app_toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="@android:color/transparent"
+    app:titleTextColor="@color/black"
+    app:navigationIcon="?attr/homeAsUpIndicator"
+    android:elevation="4dp"
+    app:menu="@menu/menu_appbar_mark_attendance"
+    android:theme="@style/ThemeOverlay.AppCompat"/>

@@ -1,0 +1,15 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+   <item>
+       <shape android:shape="oval">
+           <solid android:color="@color/white"/>
+           <stroke android:width="3dp" android:color="#EE7F22"/>
+           <padding
+               android:bottom="8dp"
+               android:left="8dp"
+               android:right="8dp"
+               android:top="8dp" />
+       </shape>
+   </item>
+
+    <item android:drawable="@drawable/shape_markattendence_smallercircle"/>
+</layer-list>
