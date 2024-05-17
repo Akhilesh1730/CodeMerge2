@@ -15,4 +15,15 @@
     <style name="AppTheme.Picker" parent="Theme.MaterialComponents.Light.NoActionBar" >
         <item name="android:textColorPrimary">@android:color/black</item>
     </style>
+    <style name="AppBottomSheetTheme"
+        parent="Theme.Design.Light.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/DialogStyle</item>
+    </style>
+   <style name="DialogStyle"
+       parent="Widget.MaterialComponents.BottomSheet">
+        <item name="android:background">@drawable/attendence_bottom_sheet_fragment_shape</item>
+   </style>
+    <style name="CustomBottomSheetStyle" parent="Widget.MaterialComponents.BottomSheet">
+        <item name="shapeAppearanceOverlay">@drawable/shape_appearance_overlay_rounded_bottomsheet</item>
+    </style>
 </resources>

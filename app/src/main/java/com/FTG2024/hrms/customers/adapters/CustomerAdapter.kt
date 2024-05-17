@@ -1,3 +1,5 @@
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,18 +26,41 @@ class CustomerAdapter : ListAdapter<Data, CustomerAdapter.CustomerViewHolder>(Cu
         return CustomerViewHolder(itemView)
     }
 
+
     override fun onBindViewHolder(holder: CustomerViewHolder, position: Int) {
         val currentItem = getItem(position)
         val dateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault())
-        val parsedDate = dateFormat.parse(currentItem.CREATED_MODIFIED_DATE)
-        val dateFormatter = SimpleDateFormat("dd MMM, yyyy", Locale.getDefault())
-        val formattedDate = dateFormatter.format(parsedDate)
+
+        val parsedDate = if (!currentItem.CREATED_MODIFIED_DATE.isNullOrEmpty()) {
+            dateFormat.parse(currentItem.CREATED_MODIFIED_DATE)
+        } else {
+            null
+        }
+
+        val formattedDate = if (parsedDate != null) {
+            val dateFormatter = SimpleDateFormat("dd MMM, yyyy", Locale.getDefault())
+            dateFormatter.format(parsedDate)
+        } else {
+            ""
+        }
+
+
+
 
         holder.customerNameTextView.text = "${currentItem.FIRST_NAME} ${currentItem.LAST_NAME}"
         holder.customerPhoneTextView.text = "+91 ${currentItem.MOBILE_NO}"
-        holder.customertitleTextView.text = "Title ----"
+        holder.customertitleTextView.text =  "Title ${currentItem.ADDRESS}"
         holder.customerDateTextView.text = formattedDate
+        holder.customerPhoneTextView.setOnClickListener {
+            val phoneNumber = "+91 ${currentItem.MOBILE_NO}"
+            val intent = Intent(Intent.ACTION_DIAL).apply {
+                data = Uri.parse("tel:$phoneNumber")
+            }
+            it.context.startActivity(intent)
+        }
+
     }
+
 }
 
 class CustomerDiffCallback : DiffUtil.ItemCallback<Data>() {

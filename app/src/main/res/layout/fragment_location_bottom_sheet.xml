@@ -108,7 +108,4 @@
       app:layout_constraintHorizontal_bias="0.5"
       app:layout_constraintStart_toEndOf="@+id/button_bottom_location_fragment_refresh"
       app:layout_constraintTop_toTopOf="@+id/button_bottom_location_fragment_refresh" />
-
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>

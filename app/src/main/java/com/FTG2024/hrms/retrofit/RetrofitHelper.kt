@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit
 
 
 object RetrofitHelper {
-    private val BASE_URL = "https://0308-2401-4900-1b8b-fa4f-5446-2909-ade7-24f9.ngrok-free.app"
+    private val BASE_URL = "https://hrm.brothers.net.in"
     private val API_KEY = "w9OAxS4zZXSvub0rVCZf5mt4v6K66pj2"
 
     fun getRetrofitInstance(tokenManager: TokenManager): Retrofit {

@@ -2,8 +2,11 @@ package com.FTG2024.hrms.markattendance
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.provider.Settings
 import android.util.Log
 import android.view.View
@@ -56,6 +59,7 @@ import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Retrofit
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
@@ -288,20 +292,44 @@ class MarkAttendanceActivity : BaseActivity() {
         val filesDir = applicationContext.filesDir
         val file = File(filesDir, "$serverImageName.jpg")
         val inputStream = contentResolver.openInputStream(selfieImageUri)
-        val outputStream = FileOutputStream(file)
-        inputStream!!.copyTo(outputStream)
+        val bitmap = BitmapFactory.decodeStream(inputStream)
+        var outputStream: FileOutputStream
+        var quality = 100
+        var fileSize: Long
+
+        do {
+            outputStream = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream)
+            outputStream.flush()
+            outputStream.close()
+            fileSize = file.length()
+            quality -= 5
+        } while (fileSize > 400 * 1024 && quality > 5)
+
+        if (fileSize < 200 * 1024) {
+            // If the image is too small, increase quality
+            do {
+                quality += 5
+                outputStream = FileOutputStream(file)
+                bitmap.compress(Bitmap.CompressFormat.JPEG, quality, outputStream)
+                outputStream.flush()
+                outputStream.close()
+                fileSize = file.length()
+            } while (fileSize < 200 * 1024 && quality < 100)
+        }
+
         val fileNameWithExtension = "$serverImageName.jpg"
         val requestFile = RequestBody.create(MediaType.parse("image/*"), file)
-        val body = MultipartBody.Part.createFormData("Image",
-            fileNameWithExtension,
-            requestFile)
-        Log.d("####", "uploadImage: ")
+        val body = MultipartBody.Part.createFormData("Image", fileNameWithExtension, requestFile)
+
+        Log.d("####", "uploadImage: File size after compression: ${file.length() / 1024} KB")
         if (isDayIn) {
             viewModel.uploadDayInSelfie(body)
         } else {
             viewModel.uploadDayOutSelfie(body)
         }
     }
+
 
     private fun postAttendanceDetail() {
         if (isDayIn) {
@@ -319,6 +347,35 @@ class MarkAttendanceActivity : BaseActivity() {
 
     }
 
+    private fun getResizedBitmap(uri: Uri): Bitmap? {
+        val options = BitmapFactory.Options()
+        options.inJustDecodeBounds = true // Only get image dimensions without loading full bitmap
+
+        try {
+            BitmapFactory.decodeStream(contentResolver.openInputStream(uri), null, options)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        var inSampleSize = 1
+        val originalWidth = options.outWidth
+        val originalHeight = options.outHeight
+
+        // Calculate approximate max allowed dimensions based on target size range (200KB-400KB)
+        val maxBytes = 400 * 1024 // Assuming upper limit of target range (adjust as needed)
+        val maxAllowedWidth = Math.sqrt(maxBytes.toDouble() * (originalWidth / originalHeight)).toInt()
+        val maxAllowedHeight = Math.sqrt(maxBytes.toDouble() / (originalWidth / originalHeight)).toInt()
+
+        // Determine the inSampleSize that scales the image while staying within allowed dimensions
+        while (originalWidth / inSampleSize > maxAllowedWidth || originalHeight / inSampleSize > maxAllowedHeight) {
+            inSampleSize *= 2
+        }
+
+        options.inJustDecodeBounds = false // Decode full bitmap with calculated inSampleSize
+        options.inSampleSize = inSampleSize
+
+        return BitmapFactory.decodeStream(contentResolver.openInputStream(uri), null, options)
+    }
     private fun getLocation() {
         val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         Log.d("####", "getLocation: 1")

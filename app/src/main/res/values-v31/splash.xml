@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.EMS.splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/white</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/logoimgspl</item>
+        <item name="android:windowSplashScreenBrandingImage">@drawable/fivetech</item>
+        <item name="postSplashScreenTheme">@style/Base.Theme.EMSApp</item>
+    </style>
+</resources>
