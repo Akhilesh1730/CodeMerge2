@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <drawable name="logo">
+        <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+            <item>
+                <bitmap
+                    android:src="@drawable/logoimg"  android:gravity="center"
+                    android:scaleType="fitCenter"  />
+            </item>
+        </layer-list>
+    </drawable>
+</resources>

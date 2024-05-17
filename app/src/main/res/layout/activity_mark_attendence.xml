@@ -4,7 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".markattendance.MarkAttendanceActivity">
+
+
     <include
         android:id="@+id/app_toolbar"
         layout="@layout/toolbar_app"
@@ -16,22 +19,102 @@
 
     <ImageView
         android:id="@+id/imageView_markattendance_selfie"
-        android:layout_width="413dp"
-        android:layout_height="514dp"
+        android:layout_width="match_parent"
+        android:layout_height="382dp"
+        android:layout_marginHorizontal="16dp"
+        android:background="@drawable/shape_mark_attendance_selfie"
+        android:scaleType="centerCrop"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:background="@drawable/markattendance_selfie_img"/>
+        app:layout_constraintTop_toBottomOf="@+id/app_toolbar" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/imageView_selfie"
         android:layout_width="88dp"
         android:layout_height="88dp"
+        android:visibility="visible"
         android:background="@drawable/shape_layelist_camera_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView_markattendance_selfie" />
 
+    <TextView
+        android:id="@+id/label_mark_attendance_take_selfie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:text="Take a Selfie"
+        android:textColor="#EE7F22"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView_markattendance_selfie"
+        app:layout_constraintEnd_toEndOf="@+id/imageView_markattendance_selfie"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_toolbar" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button_mark_attendance_upload"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="16dp"
+        android:textColor="@color/white"
+        android:background="@drawable/shape_markattendance_buttons"
+        android:text="Upload"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_markattendance_selfie" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/button_mark_attendance_mark_entry"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="220dp"
+        android:background="@drawable/shape_markattendance_buttons"
+        android:text="Mark Entry"
+        android:textColor="@color/white"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_markattendance_selfie" />
+
+    <!--<TextView
+        android:id="@+id/label_mark_attendance_mark_confirmation"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="32dp"
+        android:text="Your selfie has been uploaded successfully. Mark your Attendance"
+        android:textColor="#EE7F22"
+        android:textSize="16sp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_markattendance_selfie" />
+-->
+    <!--<EditText
+        android:id="@+id/editText_mark_attendance_remarks"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:ems="10"
+        android:inputType="text"
+        android:layout_marginHorizontal="16dp"
+        android:paddingVertical="16dp"
+        android:hint="Enter Remarks"
+        android:textColor="#EE7F22"
+        android:textColorHint="#EE7F22"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/label_mark_attendance_mark_confirmation" />
+-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -76,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:background="@drawable/shape_dayin_dayout"
+                android:visibility="visible"
                 android:layout_marginStart="8dp"
                 android:layout_marginVertical="4dp"
                 android:paddingVertical="8dp"
@@ -94,11 +94,11 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginVertical="4dp"
                 android:paddingVertical="8dp"
-                android:text="Day In"
+                android:text="Day Out"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 android:textColor="@color/white"
-                android:visibility="gone"/>
+                android:visibility="visible"/>
         </LinearLayout>
 
         <androidx.cardview.widget.CardView
@@ -171,7 +171,6 @@
                     android:layout_height="28dp"
                     android:layout_gravity="center"
                     android:layout_marginTop="32dp"
-                    android:background="#EFEFEF"
                     android:src="@drawable/dashboard_attendance_img"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -355,7 +354,7 @@
                     android:layout_height="28dp"
                     android:layout_gravity="center"
                     android:layout_marginTop="32dp"
-                    android:src="@drawable/dashboard_attendance_img"
+                    android:src="@drawable/dashboard_tasks_img"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
@@ -390,7 +389,7 @@
                     android:layout_height="28dp"
                     android:layout_gravity="center"
                     android:layout_marginTop="32dp"
-                    android:src="@drawable/dashboard_attendance_img"
+                    android:src="@drawable/dashboard_customer_img"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 

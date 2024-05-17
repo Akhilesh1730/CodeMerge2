@@ -9,14 +9,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:textSize="10sp"/>
+        android:textSize="10sp"
+        android:textColor="@color/orange"/>
     <TextView
         android:id="@+id/textview_datetime_date"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_gravity="center"
         android:gravity="center"
-        android:background="@drawable/shape_dateitem_date"
+        android:background="@drawable/shape_attendance_calc_label_blank"
         android:text="16"
         android:textSize="16sp"
         android:textColor="@color/white"/>
@@ -25,5 +26,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="10sp"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:textColor="@color/orange"/>
 </LinearLayout>

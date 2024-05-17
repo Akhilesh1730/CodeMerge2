@@ -2,4 +2,13 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="head_color">#1A1A1A</color>
+    <color name="back_text">#F2F2F2</color>
+    <color name="hintcolor">#8E8E8E</color>
+    <color name="skyblue">#007AFF</color>
+    <color name="orange">#EE7F22</color>
+    <color name="backg">#EFEFEF</color>
+    <color name="primary">#EE7F22</color>
+    <color name="secondary">#F4EBE3</color>
+    <color name="CardColor">#EEEDED</color>
 </resources>

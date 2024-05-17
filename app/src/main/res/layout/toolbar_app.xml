@@ -5,8 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
     android:background="@android:color/transparent"
+    app:titleTextAppearance="@style/TextAppearance.ToolbarTitleBold"
+    app:title="Mark Attendance"
     app:titleTextColor="@color/black"
     app:navigationIcon="?attr/homeAsUpIndicator"
     android:elevation="4dp"
-    app:menu="@menu/menu_appbar_mark_attendance"
     android:theme="@style/ThemeOverlay.AppCompat"/>

@@ -1,0 +1,114 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+  <LinearLayout
+      android:id="@+id/container_bottom_location_fragment_map_image"
+      android:layout_width="match_parent"
+      android:layout_height="240dp"
+      android:layout_marginHorizontal="16dp"
+      android:layout_marginTop="16dp"
+      android:orientation="vertical"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.968"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent">
+
+    <org.osmdroid.views.MapView
+        android:id="@+id/map"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+  </LinearLayout>
+
+ <!-- <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/textinput_layout_bottom_location_fragment"
+      style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/label_bottom_location_fragment">
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="11dp"
+        tools:layout_editor_absoluteY="333dp" />
+  </com.google.android.material.textfield.TextInputLayout>-->
+   <EditText
+      android:id="@+id/editTextText_bottom_location_fragment"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginHorizontal="16dp"
+      android:layout_marginTop="16dp"
+      android:visibility="gone"
+      android:ems="10"
+      android:hint="Enter Remark"
+      android:inputType="text"
+      android:textColorHint="@color/orange"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.468"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/label_bottom_location_fragment" />
+
+  <TextView
+      android:id="@+id/label_bottom_location_fragment"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="16dp"
+      android:paddingHorizontal="16dp"
+      android:text="You are in the range of office. Confirm your location or refresh"
+      android:textColor="@color/orange"
+      android:textSize="12sp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.0"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/textView_bottom_location_fragment_distance" />
+
+  <TextView
+      android:id="@+id/textView_bottom_location_fragment_distance"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="20dp"
+      android:text="Distance From Office is 22 Km"
+      android:textSize="18sp"
+      android:textStyle="bold"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.394"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/container_bottom_location_fragment_map_image" />
+
+  <androidx.appcompat.widget.AppCompatButton
+      android:id="@+id/button_bottom_location_fragment_refresh"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginHorizontal="16dp"
+      android:layout_marginBottom="16dp"
+      android:layout_marginTop="16dp"
+      android:background="@drawable/shape_markattendance_buttons_white"
+      android:text="Refresh"
+      android:textColor="@color/orange"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toStartOf="@+id/button_bottom_location_fragment_submit"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/editTextText_bottom_location_fragment" />
+
+  <androidx.appcompat.widget.AppCompatButton
+      android:id="@+id/button_bottom_location_fragment_submit"
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="16dp"
+      android:background="@drawable/shape_markattendance_buttons"
+      android:text="Submit"
+      android:textColor="@color/white"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toEndOf="@+id/button_bottom_location_fragment_refresh"
+      app:layout_constraintTop_toTopOf="@+id/button_bottom_location_fragment_refresh" />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
