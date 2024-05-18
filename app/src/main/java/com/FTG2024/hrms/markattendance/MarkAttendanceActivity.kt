@@ -161,11 +161,13 @@ class MarkAttendanceActivity : BaseActivity() {
                             showToast("Entry Recorded Successfully")
                         } else {
                             showToast(dayInResponse.message)
+                            navigateToDashBoard()
                         }
                     }
 
                     is com.FTG2024.hrms.uidata.Response.Exception -> {
                         showToast("Failed to mark attendance")
+                        navigateToDashBoard()
                     }
 
                     else -> return@Observer
@@ -185,15 +187,12 @@ class MarkAttendanceActivity : BaseActivity() {
                         }
                         stopLocationUpdates()
                         stopNetUpdates()
-                        val intent = Intent(this, DashboardActivity::class.java)
-                        intent.putExtra("isMarked", true)
-                        startActivity(intent)
-                        progressDialog.dismiss()
+                        navigateToDashBoard()
                     }
                     is com.FTG2024.hrms.uidata.Response.Exception -> {
                         progressDialog.dismiss()
                         showToast("Failed to mark attendance")
-                        startActivity(Intent(this, DashboardActivity::class.java))
+                        navigateToDashBoard()
                 }
                     else -> return@Observer
                 }
@@ -233,7 +232,7 @@ class MarkAttendanceActivity : BaseActivity() {
                     is com.FTG2024.hrms.uidata.Response.Exception -> {
                         progressDialog.dismiss()
                         showToast(response.message.toString())
-                        startActivity(Intent(this, DashboardActivity::class.java))
+                        navigateToDashBoard()
                     }
                     else -> return@Observer
                 }
@@ -241,6 +240,11 @@ class MarkAttendanceActivity : BaseActivity() {
         })
     }
 
+    private fun navigateToDashBoard() {
+        val intent = Intent(this, DashboardActivity :: class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+    }
     private fun getDecimalValueOfLocation(dms : String): Double {
         val parts = dms.split("[^\\d.]".toRegex())
             .filter { it.isNotBlank() }
@@ -512,9 +516,7 @@ class MarkAttendanceActivity : BaseActivity() {
             .observe(this) { workInfo ->
                 Log.d("####", "startLocationUpdates: ")
                 if(workInfo?.state == WorkInfo.State.ENQUEUED) {
-                    val intent = Intent(this, DashboardActivity::class.java)
-                    intent.putExtra("isMarked", true)
-                    startActivity(intent)
+                    navigateToDashBoard()
                 }
             }
         workManager.enqueueUniquePeriodicWork("startNetID", ExistingPeriodicWorkPolicy.KEEP, workNetRequest)

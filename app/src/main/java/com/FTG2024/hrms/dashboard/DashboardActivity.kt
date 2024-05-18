@@ -11,6 +11,7 @@ import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
@@ -82,14 +83,17 @@ class DashboardActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityDashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        //fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         tokenManager = TokenManagerImpl(getSharedPreferences("user_prefs", MODE_PRIVATE))
         retrofitHelper = RetrofitHelper.getRetrofitInstance(tokenManager)
         viewModel = ViewModelProvider(
             this,
             DashBoardViewModelFactory(DashBoardRepo(retrofitHelper.create(DashboardApiService::class.java)))
-        )
-            .get(DashBoardViewModel::class.java)
+        ).get(DashBoardViewModel::class.java)
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                finish()
+            }
+        })
         setCardsListeners()
         dayInButtonListener()
         setUpObserver()
@@ -106,8 +110,9 @@ class DashboardActivity : BaseActivity() {
                         isLoggedIn = false
                         setUp()
                     } else {
-                        startActivity(Intent(this, NoPermissionActivity::class.java))
-                        finish()
+                        val intent = Intent(this, NoPermissionActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(intent)
                     }
                 }
             })
@@ -132,6 +137,8 @@ class DashboardActivity : BaseActivity() {
         progressDialog = getProgressDialog("Fetching Data")
         progressDialog.show()
         viewModel.getDashBoardData(EmpIdRequest(empID.toInt()))
+        binding.scrollviewDash.visibility = View.VISIBLE
+        binding.viewDash.visibility = View.INVISIBLE
     }
 
     private fun setUpObserver() {
@@ -209,7 +216,7 @@ class DashboardActivity : BaseActivity() {
             binding.textviewDayinContainerInout.setTextColor(resources.getColor(R.color.orange))
             binding.textviewDayinContainerInout.text = dashResponse.attendenceData.get(0).DAYIN_TIME
             binding.textviewDayoutContainerInout.setBackgroundResource(R.drawable.shape_dayin_dayout)
-            //binding.textviewDayinContainerInout.setOnClickListener(null)
+            binding.textviewDayinContainerInout.setOnClickListener(null)
         } else if (dashResponse.attendenceData.get(0).ATTENDENCE_STATUS == "E") {
             binding.textviewDayoutContainerInout.visibility = View.VISIBLE
             binding.textviewDayinContainerInout.visibility = View.VISIBLE
@@ -220,7 +227,7 @@ class DashboardActivity : BaseActivity() {
                 dashResponse.attendenceData.get(0).DAYOUT_TIME
             binding.textviewDayoutContainerInout.setBackgroundResource(R.drawable.shape_dayin_dayout_both)
             binding.textviewDayinContainerInout.setBackgroundResource(R.drawable.shape_dayin_dayout_both)
-            //binding.textviewDayinContainerInout.setOnClickListener(null)
+            binding.textviewDayinContainerInout.setOnClickListener(null)
             binding.textviewDayoutContainerInout.setOnClickListener(null)
         } else {
             binding.textviewDayinContainerInout.visibility = View.VISIBLE
@@ -232,29 +239,27 @@ class DashboardActivity : BaseActivity() {
 
     private fun dayInButtonListener() {
         binding.textviewDayinContainerInout.setOnClickListener {
-            Log.d("###", "dayInButtonListener: ")
-            progressDialog = ProgressDialog(this, "Fetching location")
-            progressDialog.show()
-            isDayin = true
-            getLocation()
-            /* if (isDevModeOn()) {
-               showToast("Please Turn off developer mode")
-           } else {
+            if (isDevModeOn()) {
+                showToast("Turn off Developer Options")
+            } else {
+                progressDialog = ProgressDialog(this, "Fetching location")
+                progressDialog.show()
+                isDayin = true
+                getLocation()
+            }
 
-           }*/
         }
 
         binding.textviewDayoutContainerInout.setOnClickListener {
             Log.d("$$$$", "dayOutButtonListener: ")
-            progressDialog = ProgressDialog(this, "Fetching location")
-            progressDialog.show()
-            isDayin = false
-            getLocation()
-            /* if (isDevModeOn()) {
-                 showToast("Please Turn off developer mode")
-             } else {
-
-             }*/
+            if (isDevModeOn()) {
+                showToast("Turn off Developer Options")
+            } else {
+                progressDialog = ProgressDialog(this, "Fetching location")
+                progressDialog.show()
+                isDayin = false
+                getLocation()
+            }
         }
     }
 
@@ -299,42 +304,7 @@ class DashboardActivity : BaseActivity() {
 
     }
 
-    /*private fun setupLocationCallback() {
-        locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult) {
-                val location: Location? = locationResult.lastLocation
-                if (location != null) {
-                    deviceLat = location.latitude
-                    deviceLong = location.longitude
-                    Log.d("####", "getLocation: $deviceLat $deviceLong")
-                    if (isRefreshClicked) {
-                        getDistance(deviceLat, deviceLong)
-                    } else {
-                        Log.d(
-                            "####",
-                            "getLocation: ${getEmployeeData().get(0).UserData.get(0).EMP_ID}"
-                        )
-                        viewModel.getWorkLocation(
-                            EmpIdRequest(getEmployeeData().get(0).UserData.get(0).EMP_ID),
-                            tokenManager.getToken()!!
-                        )
-                    }
-                    isRefreshClicked = false // Reset the refresh flag after processing
-                    stopLocationUpdates() // Stop location updates to save battery
-                    progressDialog.dismiss()
-                } else {
-                    progressDialog.dismiss()
-                    Log.d("####", "getLocation: else")
-                }
-            }
 
-            override fun onLocationAvailability(locationAvailability: LocationAvailability) {
-                if (!locationAvailability.isLocationAvailable) {
-                    Log.d("####", "Location is not available.")
-                }
-            }
-        }
-    }*/
     private fun getDistance(latitude: Double, longitude: Double) {
         val lat1 = Math.toRadians(latitude)
         val lon1 = Math.toRadians(longitude)
@@ -350,8 +320,9 @@ class DashboardActivity : BaseActivity() {
         val c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
 
         val earthRadiusMeters = 6371000.0
+        Log.d("$$$$", "getDistance: ${earthRadiusMeters * c}")
         requiredDistance = (earthRadiusMeters * c).toInt()
-
+        Log.d("$$$$", "getDistance: $requiredDistance")
         isRemarkRequired = requiredDistance > 50
         showLocationFragment(isRemarkRequired)
         progressDialog.dismiss()
@@ -393,7 +364,6 @@ class DashboardActivity : BaseActivity() {
         progressDialog = ProgressDialog(this, "Refreshing Location")
         progressDialog.show()
         getLocation()
-        //startLocationUpdates()
     }
 
     private fun getEmployeeData(): List<Data> {
@@ -408,76 +378,10 @@ class DashboardActivity : BaseActivity() {
             empID = user.EMP_ID.toString()
             empName = user.NAME
             binding.textViewNameDashboard.text = empName
-
+            binding.textViewJobTypeDashboard.text = user.ROLE_DETAILS.get(0).ROLE_NAME
             Log.d("###", "g.etEmployeeData: ${dataList.get(0).UserData.get(0).EMP_ID}")
             return dataList
         }
         return listOf()
-    }
-
-    /*fun startLocationUpdates() {
-        val constraint = Constraints.Builder().setRequiredNetworkType(NetworkType.CONNECTED).build()
-        val workRequest = PeriodicWorkRequest
-            .Builder(BackgroundLocationWorker ::class.java, 15, TimeUnit.MINUTES)
-            .setConstraints(constraint)
-            .build()
-        WorkManager.getInstance(this).enqueue(workRequest)
-        *//* val repeatingRequest = PeriodicWorkRequestBuilder<BackgroundLocationWorker>(1, TimeUnit.MINUTES)
-             .build()
-
-         WorkManager.getInstance(this).enqueueUniquePeriodicWork(
-             "location_worker",
-             ExistingPeriodicWorkPolicy.KEEP,
-             repeatingRequest
-         )*//*
-    }*/
-
-   /* private fun startLocationUpdates() {
-        if (!isLocationRequested) {
-           *//* val locationRequest = LocationRequest.Builder()
-                .setIntervalMillis(5000)
-                .setFastestIntervalMillis(2000)
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .build()*//*
-            val locationRequest = LocationRequest.create().apply {
-                priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-                interval = 5000 // 5 seconds
-                fastestInterval = 2000 // 2 seconds
-            }
-            if (ActivityCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                    this,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ) != PackageManager.PERMISSION_GRANTED
-            ) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                return
-            }
-            fusedLocationClient.requestLocationUpdates(
-                locationRequest,
-                locationCallback,
-                Looper.getMainLooper()
-            )
-            isLocationRequested = true
-        }
-    }*/
-
-   /* private fun stopLocationUpdates() {
-        if (isLocationRequested) {
-            fusedLocationClient.removeLocationUpdates(locationCallback)
-            isLocationRequested = false
-        }
-    }*/
-
-    override fun onBackPressed() {
-        super.onBackPressed()
     }
 }

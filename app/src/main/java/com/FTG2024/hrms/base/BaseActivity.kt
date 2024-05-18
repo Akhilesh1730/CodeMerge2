@@ -103,7 +103,9 @@ open class BaseActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults.isNotEmpty()) {
-                if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                if (grantResults[0] != PackageManager.PERMISSION_GRANTED && grantResults[1] != PackageManager.PERMISSION_GRANTED) {
+                    baseViewModel.setLocationPermissionLiveData(false)
+                } else if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     Log.d("###", "onRequestPermissionsResult: ")
                     if (isAsked && !isFirst) {
                         Log.d("###", "onRequestPermissionsResult: $isAsked and $isFirst")

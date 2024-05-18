@@ -5,6 +5,7 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import androidx.activity.OnBackPressedCallback
 import com.FTG2024.hrms.dashboard.DashboardActivity
 
 class NoPermissionActivity : AppCompatActivity() {
@@ -12,6 +13,11 @@ class NoPermissionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_no_permission)
         val buttonAllow = findViewById<Button>(R.id.button_allow_location)
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                finish()
+            }
+        })
         buttonAllow.setOnClickListener {
             val intent = Intent().apply {
                 action = android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS
@@ -19,11 +25,5 @@ class NoPermissionActivity : AppCompatActivity() {
             }
             startActivity(intent)
         }
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-        finish()
-        startActivity(Intent(this, MainActivity::class.java))
     }
 }

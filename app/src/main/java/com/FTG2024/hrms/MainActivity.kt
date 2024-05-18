@@ -22,11 +22,14 @@ class MainActivity : AppCompatActivity() {
         ProgressDialog(this, "Loading").show()
         tokenManager = TokenManagerImpl(getSharedPreferences("user_prefs", Context.MODE_PRIVATE))
         if (!tokenManager.getToken().isNullOrEmpty()) {
-            intent = Intent(this, DashboardActivity::class.java)
+            intent = Intent(this, DashboardActivity :: class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             intent.putExtra("isLogin", true)
             startActivity(intent)
         } else {
             intent = Intent(this, LoginActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            intent.putExtra("isLogin", true)
             startActivity(intent)
         }
     }

@@ -28,8 +28,4 @@ object RetrofitHelper {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
-
-    //val apiServiceCustomer: addCustomerApiservice = retrofit.create(addCustomerApiservice::class.java)
-
-    //val apiService: apiInterface = getRetrofitInstance().create(apiInterface::class.java)
 }

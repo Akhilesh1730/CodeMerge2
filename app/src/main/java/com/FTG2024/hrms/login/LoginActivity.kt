@@ -102,7 +102,8 @@ class LoginActivity : BaseActivity() {
 
     private fun navigateToDashBoard(data: List<Data>) {
         addListInSharedPref(data)
-        val intent = Intent(this, DashboardActivity::class.java)
+        val intent = Intent(this, DashboardActivity :: class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         intent.putExtra("isLogin", true)
         startActivity(intent)
     }

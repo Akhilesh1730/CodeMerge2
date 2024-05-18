@@ -5,10 +5,13 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.FTG2024.hrms.R
 import com.FTG2024.hrms.application.TokenManager
 import com.FTG2024.hrms.application.TokenManagerImpl
 import com.FTG2024.hrms.attendancecalendar.adapter.DatesAdapter
@@ -54,6 +57,11 @@ class AttendanceCalendarActivity : BaseActivity() {
         val view =binding.root
         setContentView(view)
         val empID = getEmployeeData().get(0).UserData.get(0).EMP_ID
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                finish()
+            }
+        })
         progressDialog = ProgressDialog(this, "Loading Data")
         progressDialog.show()
         tokenManager = TokenManagerImpl(getSharedPreferences("user_prefs", MODE_PRIVATE))
@@ -71,6 +79,7 @@ class AttendanceCalendarActivity : BaseActivity() {
                     viewModel.getAttendanceCalendarData(AttendanceCalendarRequest(empID, formatDateToString(selectedMonth + 1), selectedYear.toString()))
                 }
             })
+            bottomSheetFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppBottomSheetTheme)
             bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
         }
         setDayRecyclerView()

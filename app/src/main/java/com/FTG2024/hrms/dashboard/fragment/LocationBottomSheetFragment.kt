@@ -42,10 +42,10 @@ open class LocationBottomSheetFragment : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (distance > 50) {
+        if (distance > 1000) {
             binding.textViewBottomLocationFragmentDistance.text = "Distance From Office is ${(distance/1000).toInt()} Km"
         } else {
-            binding.textViewBottomLocationFragmentDistance.text = "Distance From Office is ${distance} M"
+            binding.textViewBottomLocationFragmentDistance.text = "Distance From Office is ${distance} M. "
         }
 
         if (isRemarkRequired) {
