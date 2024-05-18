@@ -14,6 +14,7 @@ class LoginRepository(private val loginApi : LoginActivityApiService) {
     suspend fun authUser(request : LoginRequest) {
         val response = loginApi.authUser(request)
         if (request != null) {
+            if ()
             _loginUserMutableLiveData.postValue(Event(Response.Success(response)))
         } else {
             _loginUserMutableLiveData.postValue(Event(Response.Exception("Something Went Wrong")))

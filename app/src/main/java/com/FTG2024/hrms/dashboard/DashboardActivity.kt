@@ -1,13 +1,20 @@
 package com.FTG2024.hrms.dashboard
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.TextView
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.FTG2024.hrms.NoPermissionActivity
@@ -34,6 +41,11 @@ import com.FTG2024.hrms.dialog.ProgressDialog
 import com.FTG2024.hrms.login.model.Data
 import com.FTG2024.hrms.markattendance.MarkAttendanceActivity
 import com.FTG2024.hrms.retrofit.RetrofitHelper
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationAvailability
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.location.LocationRequest
+import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -62,11 +74,15 @@ class DashboardActivity : BaseActivity() {
     private var isRemarkRequired: Boolean = false
     private var isRefreshClicked: Boolean = false
     private lateinit var locationFragment: LocationBottomSheetFragment
+    /*private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var locationCallback: LocationCallback
+    private var isLocationRequested: Boolean = false*/
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDashboardBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        //fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         tokenManager = TokenManagerImpl(getSharedPreferences("user_prefs", MODE_PRIVATE))
         retrofitHelper = RetrofitHelper.getRetrofitInstance(tokenManager)
         viewModel = ViewModelProvider(
@@ -91,6 +107,7 @@ class DashboardActivity : BaseActivity() {
                         setUp()
                     } else {
                         startActivity(Intent(this, NoPermissionActivity::class.java))
+                        finish()
                     }
                 }
             })
@@ -243,8 +260,49 @@ class DashboardActivity : BaseActivity() {
 
     private fun getLocation() {
         val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-        fusedLocationClient.lastLocation
-            .addOnSuccessListener { location ->
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            startActivity(Intent(this, NoPermissionActivity::class.java))
+            return
+        } else {
+            fusedLocationClient.lastLocation
+                .addOnSuccessListener { location ->
+                    if (location != null) {
+                        deviceLat = location.latitude
+                        deviceLong = location.longitude
+                        Log.d("####", "getLocation: $deviceLat $deviceLong")
+                        if (isRefreshClicked) {
+                            getDistance(deviceLat, deviceLong)
+                        } else {
+                            Log.d(
+                                "####",
+                                "getLocation: ${getEmployeeData().get(0).UserData.get(0).EMP_ID}"
+                            )
+                            viewModel.getWorkLocation(
+                                EmpIdRequest(getEmployeeData().get(0).UserData.get(0).EMP_ID),
+                                tokenManager.getToken()!!
+                            )
+                        }
+                    } else {
+                        progressDialog.dismiss()
+                        Log.d("####", "getLocation: else")
+                    }
+                }
+                .addOnFailureListener { e ->
+                    progressDialog.dismiss()
+                    Log.d("####", "getLocation: failed $e")
+                }
+        }
+
+    }
+
+    /*private fun setupLocationCallback() {
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                val location: Location? = locationResult.lastLocation
                 if (location != null) {
                     deviceLat = location.latitude
                     deviceLong = location.longitude
@@ -261,17 +319,22 @@ class DashboardActivity : BaseActivity() {
                             tokenManager.getToken()!!
                         )
                     }
+                    isRefreshClicked = false // Reset the refresh flag after processing
+                    stopLocationUpdates() // Stop location updates to save battery
+                    progressDialog.dismiss()
                 } else {
                     progressDialog.dismiss()
                     Log.d("####", "getLocation: else")
                 }
             }
-            .addOnFailureListener { e ->
-                progressDialog.dismiss()
-                Log.d("####", "getLocation: failed $e")
-            }
-    }
 
+            override fun onLocationAvailability(locationAvailability: LocationAvailability) {
+                if (!locationAvailability.isLocationAvailable) {
+                    Log.d("####", "Location is not available.")
+                }
+            }
+        }
+    }*/
     private fun getDistance(latitude: Double, longitude: Double) {
         val lat1 = Math.toRadians(latitude)
         val lon1 = Math.toRadians(longitude)
@@ -309,6 +372,7 @@ class DashboardActivity : BaseActivity() {
                     navigateToMarkAttendance(remark)
                 }
             })
+        locationFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppBottomSheetTheme)
         locationFragment.show(supportFragmentManager, "Location Fragment")
     }
 
@@ -329,6 +393,7 @@ class DashboardActivity : BaseActivity() {
         progressDialog = ProgressDialog(this, "Refreshing Location")
         progressDialog.show()
         getLocation()
+        //startLocationUpdates()
     }
 
     private fun getEmployeeData(): List<Data> {
@@ -367,8 +432,52 @@ class DashboardActivity : BaseActivity() {
          )*//*
     }*/
 
+   /* private fun startLocationUpdates() {
+        if (!isLocationRequested) {
+           *//* val locationRequest = LocationRequest.Builder()
+                .setIntervalMillis(5000)
+                .setFastestIntervalMillis(2000)
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .build()*//*
+            val locationRequest = LocationRequest.create().apply {
+                priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+                interval = 5000 // 5 seconds
+                fastestInterval = 2000 // 2 seconds
+            }
+            if (ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_FINE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return
+            }
+            fusedLocationClient.requestLocationUpdates(
+                locationRequest,
+                locationCallback,
+                Looper.getMainLooper()
+            )
+            isLocationRequested = true
+        }
+    }*/
+
+   /* private fun stopLocationUpdates() {
+        if (isLocationRequested) {
+            fusedLocationClient.removeLocationUpdates(locationCallback)
+            isLocationRequested = false
+        }
+    }*/
+
     override fun onBackPressed() {
         super.onBackPressed()
-        finish()
     }
 }

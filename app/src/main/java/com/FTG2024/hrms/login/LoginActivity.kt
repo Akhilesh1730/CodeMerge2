@@ -86,7 +86,7 @@ class LoginActivity : BaseActivity() {
                         } else if (loginResponse.code == 304) {
                             showToast(loginResponse.message)
                         } else {
-                            showToast("Something went wrong")
+                            showToast("Unable To Reach Server. Retry")
                         }
                         progressDialog.dismiss()
                     }

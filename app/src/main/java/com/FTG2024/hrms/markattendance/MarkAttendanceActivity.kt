@@ -468,19 +468,19 @@ class MarkAttendanceActivity : BaseActivity() {
     }
 
 
-    private fun getEmployeeData() : List<Data> {
-        val sharedPref = getSharedPreferences("employee_detail_pref", Context.MODE_PRIVATE)
-        val dataListJson = sharedPref.getString("employeeDataListKey", null)
+        private fun getEmployeeData() : List<Data> {
+            val sharedPref = getSharedPreferences("employee_detail_pref", Context.MODE_PRIVATE)
+            val dataListJson = sharedPref.getString("employeeDataListKey", null)
 
-        if (dataListJson != null) {
-            val gson = Gson()
-            val dataList: List<Data> =
-                gson.fromJson(dataListJson, object : TypeToken<List<Data>>() {}.type)
-            Log.d("#####", "getEmployeeData: ${dataList[0].UserData.get(0).EMP_ID}")
-            return dataList
+            if (dataListJson != null) {
+                val gson = Gson()
+                val dataList: List<Data> =
+                    gson.fromJson(dataListJson, object : TypeToken<List<Data>>() {}.type)
+                Log.d("#####", "getEmployeeData: ${dataList[0].UserData.get(0).EMP_ID}")
+                return dataList
+            }
+            return listOf()
         }
-        return listOf()
-    }
 
      private fun startLocationUpdates() {
          val workRequest =

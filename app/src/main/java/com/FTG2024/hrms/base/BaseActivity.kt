@@ -8,6 +8,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.Settings
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
@@ -33,6 +34,8 @@ import java.util.concurrent.TimeUnit
 
 open class BaseActivity : AppCompatActivity() {
     lateinit var baseViewModel: BaseViewModel
+    private  var isAsked : Boolean = false
+    private var isFirst : Boolean = true
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         baseViewModel = ViewModelProvider(this).get(BaseViewModel::class.java)
@@ -61,17 +64,14 @@ open class BaseActivity : AppCompatActivity() {
         if (!hasLocationPermission()) {
             ActivityCompat.requestPermissions(
                 this,
-                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
+                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION,
+                    android.Manifest.permission.ACCESS_COARSE_LOCATION),
                 LOCATION_PERMISSION_REQUEST_CODE
             )
         } else {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 if (!hasBackgroundLocationPermission()) {
-                    ActivityCompat.requestPermissions(
-                        this,
-                        arrayOf(android.Manifest.permission.ACCESS_BACKGROUND_LOCATION),
-                        BACKGROUND_LOCATION_PERMISSION_REQUEST_CODE
-                    )
+                    requestBackgroundPermission()
                 } else {
                     baseViewModel.setLocationPermissionLiveData(true)
                 }
@@ -102,11 +102,36 @@ open class BaseActivity : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                requestBackgroundPermission()
-            } else {
-                baseViewModel.setLocationPermissionLiveData(false)
+            if (grantResults.isNotEmpty()) {
+                if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    Log.d("###", "onRequestPermissionsResult: ")
+                    if (isAsked && !isFirst) {
+                        Log.d("###", "onRequestPermissionsResult: $isAsked and $isFirst")
+                        baseViewModel.setLocationPermissionLiveData(false)
+                    } else {
+                        ActivityCompat.requestPermissions(
+                            this,
+                            arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION,
+                                android.Manifest.permission.ACCESS_COARSE_LOCATION),
+                            LOCATION_PERMISSION_REQUEST_CODE
+                        )
+                        isAsked = true
+                        isFirst = false
+                    }
+                } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED ||
+                    grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d("###", "onRequestPermissionsResult: BG")
+                    requestBackgroundPermission()
+                } else {
+                    baseViewModel.setLocationPermissionLiveData(false)
+                }
             }
+          /*  if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED ||
+                grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+
+            } else {
+
+            }*/
         } else if (requestCode == BACKGROUND_LOCATION_PERMISSION_REQUEST_CODE) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 baseViewModel.setLocationPermissionLiveData(true)
@@ -118,6 +143,7 @@ open class BaseActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.R)
     fun requestBackgroundPermission() {
+        Log.d("###", "requestBackgroundPermission: Bg")
         val builder = AlertDialog.Builder(this)
         builder.setTitle("Location Permission Needed")
         builder.setMessage("This app needs to monitor your location in the background for attendance purpose. Please enable \"${packageManager.backgroundPermissionOptionLabel}\" permission in the settings.")

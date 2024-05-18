@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
         tokenManager = TokenManagerImpl(getSharedPreferences("user_prefs", Context.MODE_PRIVATE))
         if (!tokenManager.getToken().isNullOrEmpty()) {
             intent = Intent(this, DashboardActivity::class.java)
+            intent.putExtra("isLogin", true)
             startActivity(intent)
         } else {
             intent = Intent(this, LoginActivity::class.java)
