@@ -1,0 +1,16 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Background color layer -->
+    <item>
+        <shape>
+            <solid android:color="#FFE5CC"/>
+            <corners android:radius="24dp"/>
+        </shape>
+    </item>
+
+    <!-- Centered image layer -->
+    <item
+        android:width="24dp"
+        android:height="24dp"
+        android:drawable="@drawable/dashboard_customer_img"
+        android:gravity="center" />
+</layer-list>

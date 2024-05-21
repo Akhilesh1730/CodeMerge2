@@ -7,12 +7,14 @@ import android.util.Log
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import com.FTG2024.hrms.R
 import com.FTG2024.hrms.application.TokenManager
 import com.FTG2024.hrms.application.TokenManagerImpl
 import com.FTG2024.hrms.base.BaseActivity
 import com.FTG2024.hrms.dashboard.DashboardActivity
 import com.FTG2024.hrms.databinding.ActivityLoginBinding
 import com.FTG2024.hrms.dialog.ProgressDialog
+import com.FTG2024.hrms.login.fragment.ChangePasswordFragment
 import com.FTG2024.hrms.login.model.Data
 import com.FTG2024.hrms.login.model.LoginRequest
 import com.FTG2024.hrms.login.model.LoginResponse
@@ -50,11 +52,13 @@ class LoginActivity : BaseActivity() {
             progressDialog.show()
             if (validateFields()) {
                 authUser(userText.text.toString(), passText.text.toString())
-
             } else {
                 progressDialog.dismiss()
             }
         }
+      /*  binding.textviewLoginForgotPass.setOnClickListener {
+            startActivity(Intent(this, ForgotPasswordActivity::class.java))
+        }*/
     }
 
     private fun validateFields() : Boolean{

@@ -2,6 +2,7 @@ package com.FTG2024.hrms.dashboard.fragment
 
 import android.os.Bundle
 import android.preference.PreferenceManager
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -85,7 +86,11 @@ open class LocationBottomSheetFragment : BottomSheetDialogFragment() {
         }
 
         binding.buttonBottomLocationFragmentRefresh.setOnClickListener {
-            onLocationFragmentListener!!.onRefreshClicked()
+            if (isDevModeOn()) {
+                showToast("Please Turn Off Developer Mode")
+            } else {
+                onLocationFragmentListener!!.onRefreshClicked()
+            }
         }
     }
 
@@ -118,4 +123,9 @@ open class LocationBottomSheetFragment : BottomSheetDialogFragment() {
     private fun showToast(msg : String) {
         Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
     }
+    protected  fun isDevModeOn() : Boolean {
+        val devoption = Settings.Secure.getInt(requireContext().contentResolver, Settings.Global.DEVELOPMENT_SETTINGS_ENABLED, 0)
+        return devoption == 1
+    }
+
 }

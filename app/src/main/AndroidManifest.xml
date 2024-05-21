@@ -19,6 +19,12 @@
         android:theme="@style/Base.Theme.EMSApp"
         tools:targetApi="31">
         <activity
+            android:name=".profile.ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".login.ForgotPasswordActivity"
+            android:exported="false" />
+        <activity
             android:name=".customers.AddCustomerActivity"
             android:exported="false" />
         <activity

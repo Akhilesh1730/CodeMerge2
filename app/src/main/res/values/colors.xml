@@ -11,4 +11,6 @@
     <color name="primary">#EE7F22</color>
     <color name="secondary">#F4EBE3</color>
     <color name="CardColor">#EEEDED</color>
+    <color name="light_gray">#F5F5F5F5</color>
+    <color name="black_shade">#474546</color>
 </resources>

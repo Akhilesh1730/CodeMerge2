@@ -41,6 +41,7 @@ import com.FTG2024.hrms.databinding.ActivityDashboardBinding
 import com.FTG2024.hrms.dialog.ProgressDialog
 import com.FTG2024.hrms.login.model.Data
 import com.FTG2024.hrms.markattendance.MarkAttendanceActivity
+import com.FTG2024.hrms.profile.ProfileActivity
 import com.FTG2024.hrms.retrofit.RetrofitHelper
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationAvailability
@@ -130,6 +131,9 @@ class DashboardActivity : BaseActivity() {
         }
         binding.cardviewCustomerDashboard.setOnClickListener {
             startActivity(Intent(this, AddCustomerActivity::class.java))
+        }
+        binding.imageViewProfileDashboard.setOnClickListener {
+            startActivity(Intent(this, ProfileActivity::class.java))
         }
     }
 
@@ -336,7 +340,11 @@ class DashboardActivity : BaseActivity() {
             isRemarkRequired,
             object : LocationBottomSheetFragment.OnLocationClickListener {
                 override fun onRefreshClicked() {
-                    requestNewLocation()
+                    if (isDevModeOn()) {
+                        showToast("Turn off Developer Options")
+                    } else {
+                        requestNewLocation()
+                    }
                 }
 
                 override fun onSubmitClicked(remark: String) {
