@@ -3,6 +3,7 @@ package com.FTG2024.hrms.dashboard.repo
 import com.FTG2024.hrms.base.EmpIdRequest
 import com.FTG2024.hrms.base.LocationResponse
 import com.FTG2024.hrms.dashboard.model.DashBoardResponse
+import com.FTG2024.hrms.profile.model.ProfileEmployeeDetailResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST

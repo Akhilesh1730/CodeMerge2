@@ -8,9 +8,13 @@ import com.FTG2024.hrms.attendancecalendar.model.AttendanceCalendarRequest
 import com.FTG2024.hrms.uidata.Response
 
 class AttendanceRepository(private val apiService: AttendanceApiService)  {
-    private var _attendanceCalendarMutableLiveData: MutableLiveData<com.FTG2024.hrms.uidata.Event<Response>> = MutableLiveData()
-    val attendanceCalendarMutableLiveData : LiveData<com.FTG2024.hrms.uidata.Event<Response>>
+    private var _attendanceCalendarMutableLiveData: MutableLiveData<Event<Response>> = MutableLiveData()
+    val attendanceCalendarMutableLiveData : LiveData<Event<Response>>
         get() = _attendanceCalendarMutableLiveData
+
+    private var _userDetailsMutableLiveData: MutableLiveData<Event<Response>> = MutableLiveData()
+    val userDetailsMutableLiveData : LiveData<Event<Response>>
+        get() = _userDetailsMutableLiveData
 
     suspend fun getAttendanceCalendar(request: AttendanceCalendarRequest) {
         val response = apiService.getAttendanceCalendar(request)
@@ -24,6 +28,21 @@ class AttendanceRepository(private val apiService: AttendanceApiService)  {
             }
         } else {
             _attendanceCalendarMutableLiveData.postValue(Event(Response.Exception("Failed to load Data")))
+        }
+    }
+
+    suspend fun getEmployeeProfile() {
+        val response = apiService.getProfileDetails()
+        Log.d("####", "getEmployeeProfile: $response")
+        if (response.isSuccessful) {
+            val profileEmployeeDetailResponse = response.body()
+            if (profileEmployeeDetailResponse!!.code == 200) {
+                _userDetailsMutableLiveData.postValue(Event(Response.Success(profileEmployeeDetailResponse)))
+            } else {
+                _userDetailsMutableLiveData.postValue(Event(Response.Exception("Unable to login")))
+            }
+        } else {
+            _userDetailsMutableLiveData.postValue(Event(Response.Exception("Unable to login")))
         }
     }
 }

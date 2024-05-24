@@ -16,7 +16,17 @@ class AttendanceViewModel(private val repository: AttendanceRepository) : ViewMo
         }
     }
 
+    fun getEmployeeProfile() {
+        viewModelScope.launch {
+            repository.getEmployeeProfile()
+        }
+    }
+
     fun getAttendanceCalendarLiveData(): LiveData<Event<Response>> {
         return repository.attendanceCalendarMutableLiveData
+    }
+
+    fun getUserLiveData(): LiveData<Event<Response>> {
+        return repository.userDetailsMutableLiveData
     }
 }

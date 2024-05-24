@@ -13,8 +13,46 @@
         android:layout_height="match_parent"
         tools:context=".profile.ProfileActivity">
 
-        <ImageView
-            android:id="@+id/imageView3"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/transparent"
+            android:theme="@style/ThemeOverlay.AppCompat"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="?attr/homeAsUpIndicator"
+            app:title="My Profile"
+            app:titleTextAppearance="@style/TextAppearance.ToolbarTitleBold"
+            app:titleTextColor="@color/black" />
+
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="16dp"
+            app:layout_constraintBottom_toTopOf="@+id/textView_profile_emp_name"
+            app:layout_constraintEnd_toEndOf="@+id/textView_profile_emp_name"
+            app:layout_constraintStart_toStartOf="@+id/textView_profile_emp_name"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/profile_user_image"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/profile_pfp_img" />
+
+            <ImageView
+                android:id="@+id/imageView_profile_edit_photo"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="top|end"
+                android:layout_margin="8dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:padding="8dp"
+                android:src="@drawable/profile_background_circle_with_edit" />
+        </FrameLayout>
+       <!-- <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profile_user_image"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="88dp"
@@ -23,7 +61,7 @@
             app:layout_constraintBottom_toTopOf="@+id/textView_profile_emp_name"
             app:layout_constraintEnd_toEndOf="@+id/textView_profile_emp_name"
             app:layout_constraintStart_toStartOf="@+id/textView_profile_emp_name"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent" />-->
 
         <TextView
             android:id="@+id/textView_profile_emp_name"
@@ -267,6 +305,16 @@
                     app:layout_constraintTop_toTopOf="@+id/label_profile_logout" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>
+
+        <!--<ImageView
+            android:id="@+id/imageView_profile_edit_photo"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="104dp"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintEnd_toEndOf="@+id/profile_user_image"
+            app:layout_constraintTop_toTopOf="@+id/profile_user_image"
+            app:srcCompat="@drawable/profile_background_circle_with_edit" />-->
     </androidx.constraintlayout.widget.ConstraintLayout>
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/profile_fragmentContainerView"

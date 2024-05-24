@@ -19,7 +19,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         splashScreen.setKeepOnScreenCondition { true }
-        ProgressDialog(this, "Loading").show()
         tokenManager = TokenManagerImpl(getSharedPreferences("user_prefs", Context.MODE_PRIVATE))
         if (!tokenManager.getToken().isNullOrEmpty()) {
             intent = Intent(this, DashboardActivity :: class.java)

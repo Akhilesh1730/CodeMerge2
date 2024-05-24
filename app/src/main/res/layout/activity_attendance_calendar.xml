@@ -26,22 +26,22 @@
         android:id="@+id/container_spinner_attendance_calendar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.071"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/app_toolbar">
+        app:layout_constraintTop_toBottomOf="@+id/container_spinner_attendance_employee">
 
         <TextView
             android:id="@+id/textview_attendance_calc_selected_time"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:layout_marginTop="2dp"
             android:layout_marginEnd="8dp"
             android:text="January 2024"
             android:textColor="#E78A00"
             android:textSize="20sp"
-            android:layout_marginTop="2dp"
             android:textStyle="bold" />
 
         <ImageView
@@ -52,11 +52,53 @@
             android:src="@drawable/baseline_keyboard_arrow_down_24" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/container_spinner_attendance_employee"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/container_spinner_attendance_calendar"
+        app:layout_constraintTop_toBottomOf="@+id/app_toolbar">
+
+        <TextView
+            android:id="@+id/label_attendance_calc_selected_employee"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="8dp"
+            android:text="Employee name : "
+            android:textColor="#E78A00"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textview_attendance_calc_emp_name"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="8dp"
+            android:text="Harshvardhan Patil"
+            android:textColor="#E78A00"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/button_attendance_calc_select_employee"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="#F9F7FC"
+            android:src="@drawable/mark_attendence_down_arrow" />
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclycerview_calendar_days"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"

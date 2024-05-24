@@ -14,7 +14,7 @@
     android:id="@+id/scrollview_dash"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:visibility="gone">
+    android:visibility="visible">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
@@ -24,15 +24,14 @@
         tools:context=".dashboard.DashboardActivity">
 
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/imageView_profile_dashboard"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginStart="32dp"
             android:layout_marginTop="32dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:background="@drawable/shape_layerlist_profile_dashboard"/>
+            app:layout_constraintTop_toTopOf="parent"/>
 
         <TextView
             android:id="@+id/textView_name_dashboard"
@@ -53,6 +52,7 @@
             android:layout_marginTop="8dp"
             android:text="Monthly Staff"
             android:textSize="14sp"
+            android:visibility="gone"
             app:layout_constraintStart_toStartOf="@+id/textView_name_dashboard"
             app:layout_constraintTop_toBottomOf="@+id/textView_name_dashboard" />
 
@@ -70,43 +70,43 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="48dp"
-            android:layout_marginTop="32dp"
-            android:paddingVertical="4dp"
-            android:weightSum="2"
             android:background="@drawable/shape_dayinout_container"
+            android:paddingVertical="4dp"
+            android:layout_marginTop="16dp"
+            android:weightSum="2"
             app:layout_constraintEnd_toEndOf="@+id/cardview_employee_of_month_dashboard"
             app:layout_constraintStart_toStartOf="@+id/cardview_employee_of_month_dashboard"
-            app:layout_constraintTop_toBottomOf="@+id/textView_job_type_dashboard">
+            app:layout_constraintTop_toBottomOf="@+id/container_spinner_dashboard">
 
             <TextView
                 android:id="@+id/textview_dayin_container_inout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="4dp"
+                android:layout_marginStart="8dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:visibility="visible"
-                android:layout_marginStart="8dp"
-                android:layout_marginVertical="4dp"
                 android:paddingVertical="8dp"
                 android:text="Day In"
+                android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="@color/white"/>
+                android:visibility="visible" />
 
             <TextView
                 android:id="@+id/textview_dayout_container_inout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginVertical="4dp"
+                android:layout_marginEnd="8dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:layout_marginEnd="8dp"
-                android:layout_marginVertical="4dp"
                 android:paddingVertical="8dp"
                 android:text="Day Out"
+                android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:textColor="@color/white"
-                android:visibility="visible"/>
+                android:visibility="visible" />
         </LinearLayout>
 
         <androidx.cardview.widget.CardView
@@ -410,6 +410,25 @@
                     android:textSize="16sp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:id="@+id/container_spinner_dashboard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:padding="2dp"
+            android:background="@drawable/shape_spinner_dashboard"
+            app:layout_constraintStart_toStartOf="@+id/textView_name_dashboard"
+            app:layout_constraintTop_toBottomOf="@+id/textView_name_dashboard">
+
+            <Spinner
+                android:id="@+id/spinner_dashboard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@+id/textView_name_dashboard"
+                app:layout_constraintTop_toBottomOf="@+id/textView_name_dashboard" />
+        </LinearLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

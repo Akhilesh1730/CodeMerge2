@@ -17,7 +17,17 @@ class LoginViewModel(private val repo : LoginRepository) : ViewModel(){
         }
     }
 
+    fun getEmployeeProfile() {
+        viewModelScope.launch {
+            repo.getEmployeeProfile()
+        }
+    }
+
     fun getLoginUserLiveData(): LiveData<Event<Response>> {
         return repo.loginUserMutableLiveData
+    }
+
+    fun getUserLiveData(): LiveData<Event<Response>> {
+        return repo.userDetailsMutableLiveData
     }
 }

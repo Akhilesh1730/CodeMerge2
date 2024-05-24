@@ -3,6 +3,7 @@ package com.FTG2024.hrms.attendancecalendar
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
@@ -16,10 +17,12 @@ import com.FTG2024.hrms.application.TokenManager
 import com.FTG2024.hrms.application.TokenManagerImpl
 import com.FTG2024.hrms.attendancecalendar.adapter.DatesAdapter
 import com.FTG2024.hrms.attendancecalendar.adapter.DayAdapter
+import com.FTG2024.hrms.attendancecalendar.fragment.AttendenceEnployeeFragment
 import com.FTG2024.hrms.attendancecalendar.fragment.DateBottomSheetFragment
 import com.FTG2024.hrms.attendancecalendar.model.AttendanceCalendarRequest
 import com.FTG2024.hrms.attendancecalendar.model.AttendanceCalendarResponse
 import com.FTG2024.hrms.attendancecalendar.model.AttendanceDateModel
+import com.FTG2024.hrms.attendancecalendar.model.AttendenceEmployeeModel
 import com.FTG2024.hrms.attendancecalendar.model.Data
 import com.FTG2024.hrms.attendancecalendar.model.Holiday
 import com.FTG2024.hrms.attendancecalendar.repo.AttendanceApiService
@@ -51,19 +54,19 @@ class AttendanceCalendarActivity : BaseActivity() {
     private lateinit var progressDialog : ProgressDialog
     private var month: Int = 0
     private var year: Int = 2000
+    private var empID : Int = -1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAttendanceCalendarBinding.inflate(layoutInflater)
         val view =binding.root
         setContentView(view)
-        val empID = getEmployeeData().get(0).UserData.get(0).EMP_ID
+        empID = getEmployeeData().get(0).UserData.get(0).EMP_ID
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 finish()
             }
         })
-        progressDialog = ProgressDialog(this, "Loading Data")
-        progressDialog.show()
+
         tokenManager = TokenManagerImpl(getSharedPreferences("user_prefs", MODE_PRIVATE))
         retrofitHelper = RetrofitHelper.getRetrofitInstance(tokenManager)
         viewModel = ViewModelProvider(this, AttendanceViewModelFactory(AttendanceRepository(retrofitHelper.create(AttendanceApiService::class.java))))
@@ -75,8 +78,27 @@ class AttendanceCalendarActivity : BaseActivity() {
                 override fun onDateSelected(selectedMonth: Int, selectedYear: Int) {
                     month = selectedMonth
                     year = selectedYear
+                    progressDialog = ProgressDialog(this@AttendanceCalendarActivity, "Loading")
                     progressDialog.show()
+                    if (getReportingStatus()) {
+                        binding.recyclycerviewCalendarDays.visibility = View.VISIBLE
+                        binding.containerSpinnerAttendanceCalendar.visibility = View.VISIBLE
+                    }
                     viewModel.getAttendanceCalendarData(AttendanceCalendarRequest(empID, formatDateToString(selectedMonth + 1), selectedYear.toString()))
+                }
+            })
+            bottomSheetFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppBottomSheetTheme)
+            bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
+        }
+        binding.buttonAttendanceCalcSelectEmployee.setOnClickListener {
+            val bottomSheetFragment = AttendenceEnployeeFragment.newInstance(object : AttendenceEnployeeFragment.OnEmployeeSelectedListener{
+                override fun onEmployeeSelected(model: AttendenceEmployeeModel) {
+                    empID = model.id
+                    progressDialog = ProgressDialog(this@AttendanceCalendarActivity, "Loading Data")
+                    progressDialog.show()
+                    viewModel.getAttendanceCalendarData(AttendanceCalendarRequest(empID, formatDateToString(month + 1), year.toString()))
+                    binding.textviewAttendanceCalcEmpName.text = model.name
+                    binding.containerSpinnerAttendanceCalendar.visibility = View.VISIBLE
                 }
             })
             bottomSheetFragment.setStyle(DialogFragment.STYLE_NORMAL, R.style.AppBottomSheetTheme)
@@ -86,7 +108,24 @@ class AttendanceCalendarActivity : BaseActivity() {
         setObservers()
         month = getCurrentMonth()
         year = getCurrentYear()
-        viewModel.getAttendanceCalendarData(AttendanceCalendarRequest(empID, formatDateToString(month + 1), year.toString()))
+        if (getReportingStatus()) {
+            binding.textviewAttendanceCalcEmpName.text = "Select Employee"
+            binding.containerSpinnerAttendanceEmployee.visibility = View.VISIBLE
+            binding.containerSpinnerAttendanceCalendar.visibility = View.GONE
+            binding.recyclycerviewCalendarDays.visibility = View.GONE
+        } else {
+            progressDialog = ProgressDialog(this, "Loading Data")
+            progressDialog.show()
+            viewModel.getAttendanceCalendarData(AttendanceCalendarRequest(empID, formatDateToString(month + 1), year.toString()))
+        }
+    }
+
+    fun getReportingStatus(): Boolean {
+        return getSharedPreferences("reporting_pref", Context.MODE_PRIVATE).getBoolean("IS_REPORTING", false)
+    }
+
+    fun getPosition(): Int {
+        return getSharedPreferences("reporting_pref", Context.MODE_PRIVATE).getInt("selection", 0)
     }
 
     private fun setObservers() {

@@ -13,4 +13,5 @@
     <color name="CardColor">#EEEDED</color>
     <color name="light_gray">#F5F5F5F5</color>
     <color name="black_shade">#474546</color>
+    <color name="tabs_backg">#F0F0F0</color>
 </resources>

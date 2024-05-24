@@ -5,11 +5,14 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.drawable.Drawable
 import android.location.Location
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ActivityCompat
@@ -39,10 +42,13 @@ import com.FTG2024.hrms.dashboard.repo.DashBoardRepo
 import com.FTG2024.hrms.dashboard.repo.DashboardApiService
 import com.FTG2024.hrms.databinding.ActivityDashboardBinding
 import com.FTG2024.hrms.dialog.ProgressDialog
+import com.FTG2024.hrms.leaves.LeavesActivity
 import com.FTG2024.hrms.login.model.Data
 import com.FTG2024.hrms.markattendance.MarkAttendanceActivity
 import com.FTG2024.hrms.profile.ProfileActivity
 import com.FTG2024.hrms.retrofit.RetrofitHelper
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationAvailability
 import com.google.android.gms.location.LocationCallback
@@ -51,10 +57,14 @@ import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
 
 class DashboardActivity : BaseActivity() {
+    private var position: Int = 0
     private lateinit var binding: ActivityDashboardBinding
     private lateinit var dayInButton: TextView
     private lateinit var dayOutButton: TextView
@@ -76,6 +86,8 @@ class DashboardActivity : BaseActivity() {
     private var isRemarkRequired: Boolean = false
     private var isRefreshClicked: Boolean = false
     private lateinit var locationFragment: LocationBottomSheetFragment
+    private lateinit var drawable: Drawable
+    private  var isReporting : Boolean = false
     /*private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationCallback: LocationCallback
     private var isLocationRequested: Boolean = false*/
@@ -97,6 +109,17 @@ class DashboardActivity : BaseActivity() {
         })
         setCardsListeners()
         dayInButtonListener()
+        binding.spinnerDashboard.onItemSelectedListener = object :  AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
+                isReporting = parent.getItemAtPosition(pos).toString().equals("HR Manager")
+                position = pos
+                setReportingSharedPref()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+        }
         setUpObserver()
         getEmployeeData()
         //(application as HRMApp).startLocationUpdates()
@@ -122,6 +145,9 @@ class DashboardActivity : BaseActivity() {
         }
     }
 
+    fun getEmployeeDetails() {
+
+    }
     private fun setCardsListeners() {
         binding.cardviewAssetsDashboard.setOnClickListener {
             startActivity(Intent(this, AssetsActivity::class.java))
@@ -133,17 +159,39 @@ class DashboardActivity : BaseActivity() {
             startActivity(Intent(this, AddCustomerActivity::class.java))
         }
         binding.imageViewProfileDashboard.setOnClickListener {
-            startActivity(Intent(this, ProfileActivity::class.java))
+            val intent = Intent(this, ProfileActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+        }
+
+        binding.cardviewLeavesDashboard.setOnClickListener {
+            val intent = Intent(this, LeavesActivity::class.java)
+            intent.putExtra("isReporting", isReporting)
+            startActivity(intent)
         }
     }
 
     private fun setUp() {
         progressDialog = getProgressDialog("Fetching Data")
         progressDialog.show()
+       /* CoroutineScope(Dispatchers.IO).launch {
+            //setUpProfileImage()
+        }*/
+        Glide.with(this)
+            .load("https://hrm.brothers.net.in/static/employeeProfile/20240522.jpg")
+            .diskCacheStrategy(DiskCacheStrategy.NONE)
+            .skipMemoryCache(true)
+            .into(binding.imageViewProfileDashboard)
         viewModel.getDashBoardData(EmpIdRequest(empID.toInt()))
-        binding.scrollviewDash.visibility = View.VISIBLE
-        binding.viewDash.visibility = View.INVISIBLE
     }
+
+    /*private suspend fun setUpProfileImage() {
+        val job = CoroutineScope(Dispatchers.IO).launch {
+            drawable =
+        }
+
+        job.join()
+    }*/
 
     private fun setUpObserver() {
         viewModel.getDashBoardLiveData().observe(this, Observer { event ->
@@ -208,6 +256,9 @@ class DashboardActivity : BaseActivity() {
     @SuppressLint("UseCompatLoadingForDrawables")
     private fun extractData(dashResponse: DashBoardResponse) {
         Log.d("####", "extractData: ")
+        //binding.imageViewProfileDashboard.setImageDrawable(drawable)
+        binding.scrollviewDash.visibility = View.VISIBLE
+        binding.viewDash.visibility = View.INVISIBLE
         if (dashResponse.attendenceData.isNullOrEmpty()) {
             binding.textviewDayinContainerInout.visibility = View.VISIBLE
             binding.textviewDayinContainerInout.setTextColor(resources.getColor(R.color.white))
@@ -374,6 +425,21 @@ class DashboardActivity : BaseActivity() {
         getLocation()
     }
 
+    fun setReportingSharedPref() {
+        val pref = getSharedPreferences("reporting_pref", Context.MODE_PRIVATE)
+        val editor = pref.edit()
+        editor.putBoolean("IS_REPORTING", isReporting)
+        editor.putInt("selection", position)
+        editor.apply()
+    }
+
+    fun getReportingStatus(): Boolean {
+        return getSharedPreferences("reporting_pref", Context.MODE_PRIVATE).getBoolean("IS_REPORTING", isReporting)
+    }
+
+    fun getPosition(): Int {
+        return getSharedPreferences("reporting_pref", Context.MODE_PRIVATE).getInt("selection", position)
+    }
     private fun getEmployeeData(): List<Data> {
         val sharedPref = getSharedPreferences("employee_detail_pref", Context.MODE_PRIVATE)
         val dataListJson = sharedPref.getString("employeeDataListKey", null)
@@ -383,6 +449,21 @@ class DashboardActivity : BaseActivity() {
             val dataList: List<Data> =
                 gson.fromJson(dataListJson, object : TypeToken<List<Data>>() {}.type)
             val user = dataList.get(0).UserData[0]
+            if (user.ROLE_DETAILS.size == 1) {
+                binding.textViewJobTypeDashboard.visibility = View.VISIBLE
+                binding.spinnerDashboard.visibility = View.GONE
+            } else {
+                binding.textViewJobTypeDashboard.visibility = View.INVISIBLE
+                val list = mutableListOf<String>()
+                for (role in user.ROLE_DETAILS) {
+                    list.add(role.ROLE_NAME)
+                }
+                val adapter = ArrayAdapter(this, R.layout.item_dashboard_spinner, list)
+                adapter.setDropDownViewResource(R.layout.item_dashboard_spinner)
+                binding.spinnerDashboard.adapter = adapter
+                binding.spinnerDashboard.setSelection(getPosition())
+            }
+
             empID = user.EMP_ID.toString()
             empName = user.NAME
             binding.textViewNameDashboard.text = empName
@@ -391,5 +472,17 @@ class DashboardActivity : BaseActivity() {
             return dataList
         }
         return listOf()
+    }
+
+    private fun getEmployeeProfile() : com.FTG2024.hrms.profile.model.Data? {
+        val sharedPref = getSharedPreferences("employee_profile_pref", Context.MODE_PRIVATE)
+        val profileJson = sharedPref.getString("employeeProfileKey", null)
+
+        if (profileJson != null) {
+            val gson = Gson()
+            val profile  = gson.fromJson<com.FTG2024.hrms.profile.model.Data>(profileJson, object : TypeToken<com.FTG2024.hrms.profile.model.Data>() {}.type)
+            return profile
+        }
+        return null
     }
 }
