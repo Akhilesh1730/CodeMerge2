@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/shape_leaves_container_status"
-    android:paddingBottom="16dp"
+    android:paddingBottom="8dp"
     android:layout_marginBottom="16dp">
 
     <TextView
@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="Casual Leave (full day)"
         android:textSize="16sp"
         android:textColor="@color/black"
@@ -25,7 +25,7 @@
         android:id="@+id/textView_item_leaves_approval_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="TextView"
         android:textColor="#474545"
         app:layout_constraintStart_toStartOf="@+id/textView_item_leaves_approval_name"
@@ -35,7 +35,7 @@
         android:id="@+id/textView_item_leaves_approval_leave_type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="TextView"
         android:textColor="#474545"
         app:layout_constraintStart_toStartOf="@+id/textView_item_leaves_approval_date"
@@ -51,35 +51,47 @@
         app:layout_constraintStart_toEndOf="@+id/label_item_leaves_approval_applied_on"
         app:layout_constraintTop_toTopOf="@+id/label_item_leaves_approval_applied_on" />
 
+    <TextView
+        android:id="@+id/label_item_leaves_approval_leave_reason"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reason :"
+        android:layout_marginTop="8dp"
+        android:textColor="#474545"
+        app:layout_constraintStart_toStartOf="@+id/textView_item_leaves_approval_date"
+        app:layout_constraintTop_toBottomOf="@+id/textView_item_leaves_approval_leave_type" />
+
+
     <View
         android:id="@+id/view_approval"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="8dp"
         android:background="@color/black"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_item_leaves_approval_applied_on" />
+
     <TextView
         android:id="@+id/label_item_leaves_approval_applied_on"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="Applied On : "
         android:textColor="#474545"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_item_leaves_approval_leave_type" />
+        app:layout_constraintTop_toBottomOf="@+id/label_item_leaves_approval_leave_reason" />
 
     <EditText
         android:id="@+id/edittext_item_leaves_approval_remark"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:layout_marginHorizontal="16dp"
-        android:paddingVertical="16dp"
+        android:paddingVertical="12dp"
         android:paddingStart="16dp"
         android:textSize="16sp"
         android:hint="Remark"
@@ -90,11 +102,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view_approval" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <TextView
         android:id="@+id/button_item_leaves_approval_approve"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
+        android:paddingVertical="8dp"
+        android:paddingHorizontal="12dp"
         android:background="@drawable/shape_markattendance_buttons"
         android:text="Approve"
         android:textColor="@color/white"
@@ -102,14 +116,16 @@
         app:layout_constraintEnd_toEndOf="@+id/edittext_item_leaves_approval_remark"
         app:layout_constraintTop_toBottomOf="@+id/edittext_item_leaves_approval_remark" />
 
-    <androidx.appcompat.widget.AppCompatButton
+    <TextView
         android:id="@+id/button_item_leaves_approval_reject"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="8dp"
+        android:paddingVertical="8dp"
+        android:paddingHorizontal="16dp"
         android:text="Reject"
         android:visibility="gone"
-        android:background="@drawable/shape_markattendance_buttons_white"
+        android:background="@drawable/shape_button_item_leave_reject"
         app:layout_constraintEnd_toStartOf="@+id/button_item_leaves_approval_approve"
         app:layout_constraintTop_toTopOf="@+id/button_item_leaves_approval_approve" />
 
@@ -117,7 +133,7 @@
         android:id="@+id/label_item_leaves_approval_remark"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="Remark : "
         android:textColor="#474545"
         app:layout_constraintStart_toStartOf="@+id/view_approval"
@@ -137,11 +153,21 @@
         android:id="@+id/textView_item_leaves_approval_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:text="Approved"
         android:textColor="@color/orange"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/label_item_leaves_approval_remark"
         app:layout_constraintTop_toBottomOf="@+id/label_item_leaves_approval_remark" />
+
+    <TextView
+        android:id="@+id/textview_item_leaves_approval_leave_reason"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="#474545"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@+id/label_item_leaves_approval_leave_reason"
+        app:layout_constraintTop_toTopOf="@+id/label_item_leaves_approval_leave_reason" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:background="@drawable/border_radius_dialog_box"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal">
+
+
+            <TextView
+                android:id="@+id/helo"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="5dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/poppins"
+                android:gravity="start"
+                android:text="Edit Customer Details"
+                android:textColor="@color/black"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/cancel_buttontop"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:padding="8dp"
+                android:src="@drawable/outline_cancel_24" />
+
+        </LinearLayout>
+
+
+        <EditText
+            android:id="@+id/Firstname"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginHorizontal="5dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/spinner_background"
+            android:ems="10"
+            android:hint="First Name"
+            android:inputType="textPersonName"
+            android:padding="9dp" />
+
+
+        <EditText
+            android:id="@+id/LastNameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="start"
+            android:layout_marginHorizontal="5dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/spinner_background"
+            android:gravity="start|center"
+            android:hint="Last Name"
+            android:inputType="textPersonName"
+            android:padding="9dp" />
+
+        <EditText
+            android:id="@+id/AddressEditText"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="start"
+            android:layout_marginHorizontal="5dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/spinner_background"
+            android:gravity="start|center"
+            android:hint="Address"
+            android:padding="9dp" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/CityEditText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="start"
+                android:layout_margin="4dp"
+                android:layout_marginVertical="15dp"
+                android:layout_weight="2"
+                android:background="@drawable/spinner_background"
+                android:gravity="start|center"
+                android:hint="City"
+                android:padding="9dp" />
+
+
+            <EditText
+                android:id="@+id/PincodeEditText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="start"
+                android:layout_margin="4dp"
+                android:layout_weight="2"
+                android:background="@drawable/spinner_background"
+                android:gravity="start|center"
+
+                android:hint="Pincode"
+                android:inputType="phone"
+                android:padding="9dp" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/DistrictEditText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="start"
+                android:layout_margin="4dp"
+                android:layout_weight="2"
+                android:background="@drawable/spinner_background"
+                android:gravity="start|center"
+                android:hint="District"
+                android:padding="9dp" />
+
+
+            <EditText
+                android:id="@+id/StateEditText"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="start"
+                android:layout_margin="4dp"
+                android:layout_weight="2"
+                android:background="@drawable/spinner_background"
+                android:gravity="start|center"
+                android:hint="State"
+                android:padding="9dp" />
+
+
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/PhoneEditText"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginHorizontal="5dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/spinner_background"
+            android:ems="10"
+            android:hint="Mobile Number"
+            android:inputType="phone"
+            android:padding="9dp" />
+
+
+        <EditText
+            android:id="@+id/EmailEditText"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginHorizontal="5dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/spinner_background"
+            android:ems="10"
+            android:hint="Email Address"
+            android:inputType="textEmailAddress"
+            android:padding="9dp" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="end"
+            android:padding="1dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="is working"
+                android:textColor="@color/primary"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <Switch
+                android:id="@+id/switchbutton"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:checked="false"
+                android:shadowColor="@color/primary"
+                android:thumbTint="@drawable/switch_thumb_tint"
+                android:trackTint="@drawable/switch_track_tint">
+
+
+            </Switch>
+
+        </LinearLayout>
+
+
+        <EditText
+            android:id="@+id/descrEdittetView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginHorizontal="5dp"
+            android:layout_marginVertical="15dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/spinner_background"
+            android:contentDescription="Enter description here"
+            android:gravity="start"
+            android:hint="Description"
+            android:inputType="textMultiLine"
+            android:minLines="4"
+            android:padding="4dp" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginVertical="15dp"
+            android:gravity="center"
+            android:padding="1dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/cancleButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/secondary"
+                android:paddingHorizontal="30dp"
+                android:text="Cancel"
+                android:textColor="@color/primary" />
+
+            <View
+                android:layout_width="15dp"
+                android:layout_height="1dp"></View>
+
+            <Button
+                android:id="@+id/EditCustomerButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/primary"
+                android:paddingHorizontal="30dp"
+                android:text="Edit"
+                android:textColor="@color/white" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -2,19 +2,26 @@ package com.FTG2024.hrms.dashboard
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
+import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
+import android.location.Geocoder
 import android.location.Location
+import android.location.LocationManager
 import android.os.Bundle
 import android.os.Looper
+import android.provider.Settings
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
@@ -49,12 +56,20 @@ import com.FTG2024.hrms.profile.ProfileActivity
 import com.FTG2024.hrms.retrofit.RetrofitHelper
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationAvailability
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.location.LocationSettingsRequest
+import com.google.android.gms.location.LocationSettingsResponse
+import com.google.android.gms.location.LocationSettingsStates
+import com.google.android.gms.location.LocationSettingsStatusCodes
+import com.google.android.gms.location.Priority
+import com.google.android.gms.location.SettingsClient
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
@@ -64,6 +79,29 @@ import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
 
 class DashboardActivity : BaseActivity() {
+
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var locationRequest: LocationRequest
+
+    private val locationCallback = object : LocationCallback() {
+        override fun onLocationResult(locationResult: LocationResult) {
+            val location = locationResult.lastLocation
+            if (location != null) {
+                deviceLat = location.latitude
+                deviceLong = location.longitude
+                // ... rest of your logic using the location data
+            } else {
+                // Handle case where location is still null
+                Log.d("####", "getLocation: onLocationResult: location null")
+            }
+        }
+    }
+
+    companion object {
+        private const val LOCATION_PERMISSION_REQUEST_CODE = 1
+        private const val REQUEST_CHECK_SETTINGS = 2
+    }
+
     private var position: Int = 0
     private lateinit var binding: ActivityDashboardBinding
     private lateinit var dayInButton: TextView
@@ -107,6 +145,15 @@ class DashboardActivity : BaseActivity() {
                 finish()
             }
         })
+
+        val locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY,100)
+            .setWaitForAccurateLocation(true)
+            .setMinUpdateIntervalMillis(2000)
+            .setMaxUpdateDelayMillis(100).build()
+
+        LocationServices.getFusedLocationProviderClient(applicationContext)
+            .requestLocationUpdates(locationRequest, locationCallback, null)
+
         setCardsListeners()
         dayInButtonListener()
         binding.spinnerDashboard.onItemSelectedListener = object :  AdapterView.OnItemSelectedListener {
@@ -120,6 +167,7 @@ class DashboardActivity : BaseActivity() {
 
             }
         }
+
         setUpObserver()
         getEmployeeData()
         //(application as HRMApp).startLocationUpdates()
@@ -145,6 +193,9 @@ class DashboardActivity : BaseActivity() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+    }
     fun getEmployeeDetails() {
 
     }
@@ -172,18 +223,103 @@ class DashboardActivity : BaseActivity() {
     }
 
     private fun setUp() {
-        progressDialog = getProgressDialog("Fetching Data")
-        progressDialog.show()
-       /* CoroutineScope(Dispatchers.IO).launch {
-            //setUpProfileImage()
-        }*/
-        Glide.with(this)
-            .load("https://hrm.brothers.net.in/static/employeeProfile/20240522.jpg")
-            .diskCacheStrategy(DiskCacheStrategy.NONE)
-            .skipMemoryCache(true)
-            .into(binding.imageViewProfileDashboard)
-        viewModel.getDashBoardData(EmpIdRequest(empID.toInt()))
+        if (!isGpsEnabled(this)) {
+            //showGPSSettingsDialog()
+          /*  val locationRequest = LocationRequest.Builder()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(10000)
+                .build()*/
+            val locationRequest = LocationRequest.Builder(LocationRequest.PRIORITY_HIGH_ACCURACY, 1000L)
+                .setWaitForAccurateLocation(false)
+                .setMinUpdateIntervalMillis(5000L)
+                .setMaxUpdateDelayMillis(10000L)
+                .build()
+            val builder = LocationSettingsRequest.Builder()
+                .addLocationRequest( locationRequest)
+
+            val client: SettingsClient = LocationServices.getSettingsClient(this)
+
+            client.checkLocationSettings(builder.build())
+                .addOnCompleteListener { task ->
+                    try {
+                        Log.d("###", "setUp:client ")
+                        val response: LocationSettingsResponse = task.getResult(ApiException::class.java)
+                      CoroutineScope(Dispatchers.Main).launch {
+                          Log.d("###", "setUp:  ${response.locationSettingsStates}")
+                      }
+
+
+                    } catch (exception: ApiException) {
+                        when (exception.statusCode) {
+                            LocationSettingsStatusCodes.RESOLUTION_REQUIRED -> {
+                                // Location settings are not satisfied, but this can be fixed by showing the user a dialog.
+                                try {
+                                    // Show the dialog by calling startResolutionForResult(), and check the result in onActivityResult().
+                                    val resolvableApiException = exception as ResolvableApiException
+                                    resolvableApiException.startResolutionForResult(this, REQUEST_CHECK_SETTINGS)
+                                } catch (e: IntentSender.SendIntentException) {
+                                    // Ignore the error.
+                                }
+                            }
+                            LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE -> {
+                                // Location settings are not satisfied, and no way to fix it.
+                            }
+                        }
+                    }
+                }
+
+        } else {
+
+            progressDialog = getProgressDialog("Fetching Data")
+            progressDialog.show()
+            /* CoroutineScope(Dispatchers.IO).launch {
+                 //setUpProfileImage()
+             }*/
+            Glide.with(this)
+                .load("https://hrm.brothers.net.in/static/employeeProfile/20240522.jpg")
+                .diskCacheStrategy(DiskCacheStrategy.NONE)
+                .skipMemoryCache(true)
+                .into(binding.imageViewProfileDashboard)
+            viewModel.getDashBoardData(EmpIdRequest(empID.toInt()))
+        }
+
     }
+
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == REQUEST_CHECK_SETTINGS) {
+            val states = LocationSettingsStates.fromIntent(data ?: return)
+
+            when (resultCode) {
+                Activity.RESULT_OK -> {
+                    progressDialog = getProgressDialog("Fetching Data")
+                       progressDialog.show()
+                        CoroutineScope(Dispatchers.IO).launch {
+                             //setUpProfileImage()
+                         }
+                        Glide.with(this)
+                            .load("https://hrm.brothers.net.in/static/employeeProfile/20240522.jpg")
+                            .diskCacheStrategy(DiskCacheStrategy.NONE)
+                            .skipMemoryCache(true)
+                            .into(binding.imageViewProfileDashboard)
+                        viewModel.getDashBoardData(EmpIdRequest(empID.toInt()))
+                }
+                Activity.RESULT_CANCELED -> {
+                    // The user was asked to change settings, but chose not to
+                    Log.d("###", "User chose not to make required location settings changes.")
+                    // Handle the case where user did not enable the location settings
+                }
+                else -> {
+                    Log.d("###", "Unhandled result code: $resultCode")
+                }
+            }
+        }
+    }
+
+
 
     /*private suspend fun setUpProfileImage() {
         val job = CoroutineScope(Dispatchers.IO).launch {
@@ -240,17 +376,18 @@ class DashboardActivity : BaseActivity() {
         })
     }
 
+
     private fun getDecimalValueOfLocation(dms: String): Double {
         val parts = dms.split("[^\\d.]".toRegex())
             .filter { it.isNotBlank() }
             .map { it.toDouble() }
-
+        Log.d("###", "getDecimalValueOfLocation: $dms")
         val degrees = parts[0]
         val minutes = parts[1]
         val seconds = parts[2]
 
         val decimalDegrees = degrees + minutes / 60.0 + seconds / 3600.0
-        return String.format("%.2f", decimalDegrees).toDouble()
+        return decimalDegrees
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -294,31 +431,33 @@ class DashboardActivity : BaseActivity() {
 
     private fun dayInButtonListener() {
         binding.textviewDayinContainerInout.setOnClickListener {
-            if (isDevModeOn()) {
+           /* if (isDevModeOn()) {
                 showToast("Turn off Developer Options")
-            } else {
+            } else {*/
                 progressDialog = ProgressDialog(this, "Fetching location")
                 progressDialog.show()
                 isDayin = true
                 getLocation()
-            }
+            //}
 
         }
 
         binding.textviewDayoutContainerInout.setOnClickListener {
             Log.d("$$$$", "dayOutButtonListener: ")
-            if (isDevModeOn()) {
+           /* if (isDevModeOn()) {
                 showToast("Turn off Developer Options")
-            } else {
+            } else {*/
                 progressDialog = ProgressDialog(this, "Fetching location")
                 progressDialog.show()
                 isDayin = false
                 getLocation()
-            }
+            //}
         }
     }
 
     private fun getLocation() {
+
+
         val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         if (ActivityCompat.checkSelfPermission(
                 this,
@@ -328,6 +467,8 @@ class DashboardActivity : BaseActivity() {
             startActivity(Intent(this, NoPermissionActivity::class.java))
             return
         } else {
+
+            Log.d("####", "getLocation: ${fusedLocationClient.locationAvailability.isSuccessful}")
             fusedLocationClient.lastLocation
                 .addOnSuccessListener { location ->
                     if (location != null) {
@@ -356,8 +497,24 @@ class DashboardActivity : BaseActivity() {
                     Log.d("####", "getLocation: failed $e")
                 }
         }
-
     }
+
+
+ /*   private fun getLocation() {
+        val fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            startActivity(Intent(this, NoPermissionActivity::class.java))
+            return
+        } else {
+
+            fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, null)
+        }
+    }*/
+
 
 
     private fun getDistance(latitude: Double, longitude: Double) {
@@ -397,7 +554,6 @@ class DashboardActivity : BaseActivity() {
                         requestNewLocation()
                     }
                 }
-
                 override fun onSubmitClicked(remark: String) {
                     navigateToMarkAttendance(remark)
                 }
@@ -440,6 +596,7 @@ class DashboardActivity : BaseActivity() {
     fun getPosition(): Int {
         return getSharedPreferences("reporting_pref", Context.MODE_PRIVATE).getInt("selection", position)
     }
+
     private fun getEmployeeData(): List<Data> {
         val sharedPref = getSharedPreferences("employee_detail_pref", Context.MODE_PRIVATE)
         val dataListJson = sharedPref.getString("employeeDataListKey", null)

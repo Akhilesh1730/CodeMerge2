@@ -19,9 +19,11 @@ class LeavesApprovalApprovedAdapter(private val dataList: List<LeavesApproval>)
         val textViewLeavesApprovalRemark : TextView = itemView.findViewById<TextView>(R.id.textview_item_leaves_approval_remark)
         val labelLeavesApprovalRemark : TextView = itemView.findViewById<TextView>(R.id.label_item_leaves_approval_remark)
         val textViewLeavesApprovalStatus : TextView = itemView.findViewById<TextView>(R.id.textView_item_leaves_approval_status)
+        val textViewLeavesApprovalReason: TextView =
+            itemView.findViewById<TextView>(R.id.textview_item_leaves_approval_leave_reason)
         val editTextLeavesApprovalRemark : TextView = itemView.findViewById<TextView>(R.id.edittext_item_leaves_approval_remark)
-        val buttonApprove : Button = itemView.findViewById(R.id.button_item_leaves_approval_approve)
-        val buttonReject : Button = itemView.findViewById(R.id.button_item_leaves_approval_reject)
+        val buttonApprove : TextView = itemView.findViewById(R.id.button_item_leaves_approval_approve)
+        val buttonReject : TextView = itemView.findViewById(R.id.button_item_leaves_approval_reject)
     }
 
     override fun onCreateViewHolder(
@@ -44,5 +46,6 @@ class LeavesApprovalApprovedAdapter(private val dataList: List<LeavesApproval>)
         holder.textViewLeavesApprovalAppliedOn.text = model.appliedOn
         holder.textViewLeavesApprovalRemark.text = model.remark
         holder.textViewLeavesApprovalStatus.text = model.status
+        holder.textViewLeavesApprovalReason.text = model.reason
     }
 }

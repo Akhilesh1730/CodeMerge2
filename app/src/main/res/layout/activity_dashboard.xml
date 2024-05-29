@@ -14,6 +14,7 @@
     android:id="@+id/scrollview_dash"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:paddingBottom="32dp"
     android:visibility="visible">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -429,7 +430,15 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView_name_dashboard" />
         </LinearLayout>
 
-
+        <ImageView
+            android:id="@+id/imageView_dashboard_job_change"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toStartOf="@+id/imageView_notification_dashboard"
+            app:layout_constraintHorizontal_bias="0.911"
+            app:layout_constraintStart_toEndOf="@+id/textView_name_dashboard"
+            app:layout_constraintTop_toTopOf="@+id/imageView_notification_dashboard"
+            app:srcCompat="@drawable/icon_job_change" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
 

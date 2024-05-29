@@ -1,4 +1,4 @@
-package com.example.myapplication.addCustomer
+package com.FTG2024.hrms.customers.dialogs
 
 import android.app.Dialog
 import android.content.Context
@@ -8,11 +8,17 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.Switch
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.FTG2024.hrms.R
 import com.FTG2024.hrms.application.TokenManagerImpl
+import com.FTG2024.hrms.customers.AddCustomerActivity
+import com.FTG2024.hrms.login.model.Data
 import com.example.myapplication.addCustomer.viewmodel.CustomerViewModel
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,6 +32,7 @@ class add_csutomer_dialog(context: Context, private val activity: AppCompatActiv
     private lateinit var addButton: Button
     private lateinit var cancleButton: Button
     private lateinit var cancleButtonTop: ImageView
+    private lateinit var switchbButton: Switch
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +50,7 @@ class add_csutomer_dialog(context: Context, private val activity: AppCompatActiv
         cancleButton = findViewById(R.id.cancleButton)
         cancleButtonTop = findViewById(R.id.cancel_buttontop)
 
+
         setupDialog()
     }
     private fun setupDialog() {
@@ -54,7 +62,16 @@ class add_csutomer_dialog(context: Context, private val activity: AppCompatActiv
             dismiss()
         }
 
+
+
+
         addButton.setOnClickListener {
+
+
+
+
+
+
             if (validateFields()) {
                 val firstName = findViewById<EditText>(R.id.Firstname).text.toString().trim()
                 val lastName = findViewById<EditText>(R.id.LastNameEditText).text.toString().trim()
@@ -66,20 +83,21 @@ class add_csutomer_dialog(context: Context, private val activity: AppCompatActiv
                 val mobileNumber = findViewById<EditText>(R.id.PhoneEditText).text.toString().trim()
                 val email = findViewById<EditText>(R.id.editTextTextEmailAddress2).text.toString().trim()
                 val description = findViewById<EditText>(R.id.descrEdittetView).text.toString().trim()
+                val switchState = if (switchbButton.isChecked) 1 else 0
+                val empid  =  getEmployeeData()[0].UserData[0].EMP_ID.toString()
 
-                // Get current date
                 val todaysDate = getCurrentDate()
 
                 // Launch coroutine to add customer data
                 CoroutineScope(Dispatchers.IO).launch {
                     customerViewModel.addCustomer(
-                        88,   // Employee ID
+                        empid.toInt(),
                         firstName,
                         lastName,
                         mobileNumber,
-                        1,   // Sample values for other parameters
-                        1,
-                        1,
+                        empid.toInt(),   // Employee ID
+                        9,
+                        switchState,
                         todaysDate,
                         address,
                         description,
@@ -87,6 +105,21 @@ class add_csutomer_dialog(context: Context, private val activity: AppCompatActiv
                         district,
                         pincode,
                         email,
+                        onSuccess = {
+                            dismiss()
+
+                            (activity as AddCustomerActivity).refreshPage()
+                        },
+                        onFailure = {
+
+                            Toast.makeText(
+                                context,
+                                "Please after some time something went wrong ",
+                                Toast.LENGTH_LONG
+                            ).show()
+
+                        },
+
                         TokenManagerImpl(context.getSharedPreferences("user_prefs", Context.MODE_PRIVATE))
                     )
                 }
@@ -182,4 +215,20 @@ class add_csutomer_dialog(context: Context, private val activity: AppCompatActiv
         val formatter = SimpleDateFormat("dd/MM/yyyy")
         return formatter.format(today)
     }
+
+
+    private fun getEmployeeData() : List<Data> {
+        val sharedPref = context.getSharedPreferences("employee_detail_pref", Context.MODE_PRIVATE)
+        val dataListJson = sharedPref.getString("employeeDataListKey", null)
+
+        if (dataListJson != null) {
+            val gson = Gson()
+            val dataList: List<Data> =
+                gson.fromJson(dataListJson, object : TypeToken<List<Data>>() {}.type)
+            Log.d("#####", "getEmployeeData: ${dataList[0].UserData.get(0).EMP_ID}")
+            return dataList
+        }
+        return listOf()
+    }
+
 }

@@ -2,6 +2,7 @@ package com.FTG2024.hrms.leaves.repo
 
 import com.FTG2024.hrms.leaves.model.ApplyLeaveRequest
 import com.FTG2024.hrms.leaves.model.ApplyLeaveResponse
+import com.FTG2024.hrms.leaves.model.FilterRequest
 import com.FTG2024.hrms.leaves.model.LeaveApprovalRequest
 import com.FTG2024.hrms.leaves.model.LeaveApprovalStatusRequest
 import com.FTG2024.hrms.leaves.model.LeaveApprovalStatusResponse
@@ -32,5 +33,5 @@ interface LeavesApiService {
     suspend fun applyLeave(@Body request: ApplyLeaveRequest) : Response<ApplyLeaveResponse>
 
     @POST("/api/leaveType/get")
-    suspend fun getLeaveType() : Response<LeaveTypeResponse>
+    suspend fun getLeaveType(@Body filterRequest: FilterRequest): Response<LeaveTypeResponse>
 }

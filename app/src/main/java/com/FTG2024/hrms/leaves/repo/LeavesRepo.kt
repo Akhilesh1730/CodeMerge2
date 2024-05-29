@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.FTG2024.hrms.leaves.model.ApplyLeaveRequest
+import com.FTG2024.hrms.leaves.model.FilterRequest
 import com.FTG2024.hrms.leaves.model.LeaveApprovalRequest
 import com.FTG2024.hrms.leaves.model.LeaveApprovalStatusRequest
 import com.FTG2024.hrms.leaves.model.LeaveDataRequest
@@ -34,7 +35,8 @@ class LeavesRepo(private val apiService: LeavesApiService) {
 
 
     suspend fun getLeavesType() {
-        val response = apiService.getLeaveType()
+        val filterRequest = FilterRequest(filter = " AND STATUS = 1")
+        val response = apiService.getLeaveType(filterRequest)
         Log.d("####", "getLeavesData: $response")
         if (response.isSuccessful) {
             val leaveTypeResponse = response.body()

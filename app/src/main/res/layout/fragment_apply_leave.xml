@@ -1,219 +1,224 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".leaves.fragment.ApplyLeaveFragment">
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/app_apply_leave_toolbar"
+    android:layout_height="match_parent">
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@android:color/transparent"
-        android:elevation="4dp"
-        android:theme="@style/ThemeOverlay.AppCompat"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:navigationIcon="?attr/homeAsUpIndicator"
-        app:title="Apply Leave"
-        app:titleTextAppearance="@style/TextAppearance.ToolbarTitleBold"
-        app:titleTextColor="@color/black" />
+        android:layout_height="match_parent"
+        tools:context=".leaves.fragment.ApplyLeaveFragment">
 
-    <LinearLayout
-        android:id="@+id/container_apply_leave_leave_type"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="32dp"
-        android:background="@drawable/shape_apply_leave_container"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@+id/app_apply_leave_toolbar"
-        tools:layout_editor_absoluteX="16dp">
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/app_apply_leave_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@android:color/transparent"
+            android:elevation="4dp"
+            android:theme="@style/ThemeOverlay.AppCompat"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:navigationIcon="?attr/homeAsUpIndicator"
+            app:title="Apply Leave"
+            app:titleTextAppearance="@style/TextAppearance.ToolbarTitleBold"
+            app:titleTextColor="@color/black" />
 
-        <TextView
+        <LinearLayout
+            android:id="@+id/container_apply_leave_leave_type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
-            android:text="Leave Type"
-            android:layout_marginTop="8dp"
-            android:textColor="@color/orange"
-            android:textSize="16sp" />
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/shape_apply_leave_container"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@+id/app_apply_leave_toolbar"
+            tools:layout_editor_absoluteX="16dp">
 
-        <Spinner
-            android:id="@+id/spinner_apply_leave_leave_type"
-            android:layout_width="match_parent"
-            android:layout_marginBottom="8dp"
-            android:layout_height="wrap_content"
-            android:baselineAligned="false" />
-    </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:text="Leave Type"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/orange"
+                android:textSize="16sp" />
 
-    <LinearLayout
-        android:id="@+id/container_apply_leave_mode"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/shape_apply_leave_container"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@+id/container_apply_leave_leave_type"
-        tools:layout_editor_absoluteX="51dp">
+            <Spinner
+                android:id="@+id/spinner_apply_leave_leave_type"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="8dp"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false" />
+        </LinearLayout>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
-            android:layout_marginTop="8dp"
-            android:text="Mode"
-            android:textColor="@color/orange"
-            android:textSize="16sp" />
-
-        <Spinner
-            android:id="@+id/spinner_apply_leave_mode"
-            android:layout_marginBottom="8dp"
+        <LinearLayout
+            android:id="@+id/container_apply_leave_mode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:baselineAligned="false" />
-    </LinearLayout>
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/shape_apply_leave_container"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@+id/container_apply_leave_leave_type"
+            tools:layout_editor_absoluteX="51dp">
 
-    <LinearLayout
-        android:id="@+id/container_apply_leave_start_date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/shape_apply_leave_container"
-        android:orientation="vertical"
-        android:paddingVertical="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/textView_apply_leave_first_session"
-        tools:layout_editor_absoluteX="16dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginTop="8dp"
+                android:text="Mode"
+                android:textColor="@color/orange"
+                android:textSize="16sp" />
 
-        <TextView
+            <Spinner
+                android:id="@+id/spinner_apply_leave_mode"
+                android:layout_marginBottom="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:baselineAligned="false" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/container_apply_leave_start_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
-            android:text="Start Date"
-            android:textColor="@color/orange"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/textview_apply_leave_start_date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
-            android:drawableEnd="@drawable/apply_leave_baseline_calendar_month_24"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/shape_apply_leave_container"
+            android:orientation="vertical"
             android:paddingVertical="8dp"
-            android:text="14 Jan, 2024"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
-    </LinearLayout>
+            app:layout_constraintTop_toBottomOf="@+id/textView_apply_leave_first_session"
+            tools:layout_editor_absoluteX="16dp">
 
-    <LinearLayout
-        android:id="@+id/container_apply_leave_end_date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/shape_apply_leave_container"
-        android:orientation="vertical"
-        android:paddingVertical="8dp"
-        app:layout_constraintTop_toBottomOf="@+id/container_apply_leave_start_date"
-        tools:layout_editor_absoluteX="16dp">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:text="Start Date"
+                android:textColor="@color/orange"
+                android:textSize="16sp" />
 
-        <TextView
+            <TextView
+                android:id="@+id/textview_apply_leave_start_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:drawableEnd="@drawable/apply_leave_baseline_calendar_month_24"
+                android:paddingVertical="8dp"
+                android:text="14 Jan, 2024"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/container_apply_leave_end_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
-            android:text="End Date"
-            android:textColor="@color/orange"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/textview_apply_leave_end_date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="8dp"
-            android:drawableEnd="@drawable/apply_leave_baseline_calendar_month_24"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/shape_apply_leave_container"
+            android:orientation="vertical"
             android:paddingVertical="8dp"
-            android:text="14 Jan, 2024"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
+            app:layout_constraintTop_toBottomOf="@+id/container_apply_leave_start_date"
+            tools:layout_editor_absoluteX="16dp">
 
-    </LinearLayout>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:text="End Date"
+                android:textColor="@color/orange"
+                android:textSize="16sp" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+            <TextView
+                android:id="@+id/textview_apply_leave_end_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:drawableEnd="@drawable/apply_leave_baseline_calendar_month_24"
+                android:paddingVertical="8dp"
+                android:text="14 Jan, 2024"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
 
-    </LinearLayout>
+        </LinearLayout>
 
-    <EditText
-        android:id="@+id/editTextTextMultiLine"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginTop="16dp"
-        android:width="16dp"
-        android:background="@drawable/shape_apply_leave_container"
-        android:gravity="top"
-        android:hint="Reason for leave"
-        android:textColorHint="@color/orange"
-        android:inputType="textMultiLine"
-        android:minHeight="160dp"
-        android:padding="16dp"
-        android:scrollbars="vertical"
-        android:textColor="#000000"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/container_apply_leave_end_date" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/textView_apply_leave_first_session"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
-        android:gravity="center"
-        android:paddingVertical="8dp"
-        android:text="First Session"
-        android:textSize="16sp"
-        android:background="@drawable/shape_apply_leave_leave_mode_text"
-        android:visibility="gone"
-        app:layout_constraintEnd_toStartOf="@+id/textView_apply_leave_second_session"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/container_apply_leave_mode" />
+        </LinearLayout>
 
-    <TextView
-        android:id="@+id/textView_apply_leave_second_session"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
-        android:paddingVertical="8dp"
-        android:text="Second Session"
-        android:textSize="16sp"
-        android:visibility="gone"
-        android:background="@drawable/shape_apply_leave_leave_mode_text"
-        android:gravity="center"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/textView_apply_leave_first_session"
-        app:layout_constraintTop_toTopOf="@+id/textView_apply_leave_first_session" />
+        <EditText
+            android:id="@+id/editTextTextMultiLine"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="16dp"
+            android:width="16dp"
+            android:background="@drawable/shape_apply_leave_container"
+            android:gravity="top"
+            android:hint="Reason for leave"
+            android:textColorHint="@color/orange"
+            android:inputType="textMultiLine"
+            android:minHeight="160dp"
+            android:padding="16dp"
+            android:scrollbars="vertical"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/container_apply_leave_end_date" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/button_apply_leave_submit"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="16dp"
-        android:background="@drawable/shape_markattendance_buttons"
-        android:text="Button"
-        android:textColor="@color/white"
-        android:layout_marginTop="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLine" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <TextView
+            android:id="@+id/textView_apply_leave_first_session"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:paddingVertical="8dp"
+            android:text="First Session"
+            android:textSize="16sp"
+            android:background="@drawable/shape_apply_leave_leave_mode_text"
+            android:visibility="gone"
+            app:layout_constraintEnd_toStartOf="@+id/textView_apply_leave_second_session"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/container_apply_leave_mode" />
+
+        <TextView
+            android:id="@+id/textView_apply_leave_second_session"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:paddingVertical="8dp"
+            android:text="Second Session"
+            android:textSize="16sp"
+            android:visibility="gone"
+            android:background="@drawable/shape_apply_leave_leave_mode_text"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/textView_apply_leave_first_session"
+            app:layout_constraintTop_toTopOf="@+id/textView_apply_leave_first_session" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/button_apply_leave_submit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:background="@drawable/shape_markattendance_buttons"
+            android:text="Apply leave"
+            android:textColor="@color/white"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLine" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

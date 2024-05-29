@@ -21,8 +21,8 @@ class LeavesApprovalPendingAdapter(private val dataList: List<LeavesApproval>)
         val labelLeavesApprovalRemark : TextView = itemView.findViewById<TextView>(R.id.label_item_leaves_approval_remark)
         val textViewLeavesApprovalStatus : TextView = itemView.findViewById<TextView>(R.id.textView_item_leaves_approval_status)
         val editTextLeavesApprovalRemark : TextView = itemView.findViewById<TextView>(R.id.edittext_item_leaves_approval_remark)
-        val buttonApprove : Button = itemView.findViewById(R.id.button_item_leaves_approval_approve)
-        val buttonReject : Button = itemView.findViewById(R.id.button_item_leaves_approval_reject)
+        val buttonApprove : TextView = itemView.findViewById(R.id.button_item_leaves_approval_approve)
+        val buttonReject : TextView = itemView.findViewById(R.id.button_item_leaves_approval_reject)
     }
 
     interface OnClickListener {

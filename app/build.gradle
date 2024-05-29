@@ -11,8 +11,8 @@ android {
 
     defaultConfig {
         applicationId "com.FTG2024.hrms"
-        minSdk 27
-        targetSdk 33
+        minSdk 29
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 

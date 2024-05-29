@@ -4,7 +4,6 @@ data class createcutomers(
     val ADDRESS: String,
     val CITY: String,
     val CREATED_EMP_ID: Int,
-    val CREATED_MODIFIED_DATE: String,
     val DESCRIPTION: String,
     val DISTRICT: String,
     val EMAIL_ID: String,
@@ -14,5 +13,5 @@ data class createcutomers(
     val MOBILE_NO: String,
     val PINCODE: String,
     val STATE_ID: Int,
-    val STATUS: Int
+    val IS_WORKING: Int
 )

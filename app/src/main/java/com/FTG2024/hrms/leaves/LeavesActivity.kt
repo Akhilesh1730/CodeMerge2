@@ -254,14 +254,14 @@ class LeavesActivity : BaseActivity() {
             val appliedDate = convertDateFormat(leave.APPLIED_DATE)
             val leaveID = leave.ID
             val approvedBy = "${getEmployeeProfile()!!.ID}"
-            Log.d("####", "transformLeaveApprovalData: $approvedBy")
+            val reason = if (leave.REASON.isNullOrEmpty()) "" else leave.REASON
             var remark = leave.REMARK
             if (leave.APPROVAL_STATUS.equals("P")) {
-                listOfPendingApproval.add(LeavesApproval(leave.EMPLOYEE_NAME, date, leaveType, appliedDate, "", "", leaveID, approvedBy))
+                listOfPendingApproval.add(LeavesApproval(leave.EMPLOYEE_NAME, date, leaveType, appliedDate, "","", leaveID, approvedBy, reason))
             } else if (leave.APPROVAL_STATUS.equals("A")) {
-                listOfApprovedApproval.add(LeavesApproval(leave.EMPLOYEE_NAME, date, leaveType, appliedDate, remark.toString(), "Approved", leaveID, approvedBy))
+                listOfApprovedApproval.add(LeavesApproval(leave.EMPLOYEE_NAME, date, leaveType, appliedDate, remark.toString(), "Approved", leaveID, approvedBy, reason))
             } else {
-                listOfRejectedApproval.add(LeavesApproval(leave.EMPLOYEE_NAME, date, leaveType, appliedDate, remark.toString(), "Rejected", leaveID, approvedBy))
+                listOfRejectedApproval.add(LeavesApproval(leave.EMPLOYEE_NAME, date, leaveType, appliedDate, remark.toString(), "Rejected", leaveID, approvedBy, reason))
             }
         }
     }
@@ -280,6 +280,7 @@ class LeavesActivity : BaseActivity() {
             val date = convertDateFormat(leave.DATE)
             val reason =  leave.REASON
             val appliedDate = convertDateFormat(leave.APPLIED_DATE)
+            Log.d("####", "transformLeaveData: ${leave.APPROVED_DATE}")
             if (leave.APPROVAL_STATUS.equals("P")) {
                 listOfPending.add(LeavesPending(leaveType,
                                                 date,
@@ -288,18 +289,26 @@ class LeavesActivity : BaseActivity() {
             } else if (leave.APPROVAL_STATUS.equals("A")) {
                 listOfApproved.add(LeavesApproved(leaveType, date, reason, appliedDate,
                                                   leave.APPROVED_BY.toString(),
-                                                  leave.APPROVED_DATE.toString(),
+                                                  formatServerDate(leave.APPROVED_DATE.toString()),
                                                   leave.REMARK.toString()))
             } else {
                 listOfRejected.add(
                     LeavesRejected(leaveType, date, reason, appliedDate,
                         leave.APPROVED_BY.toString(),
-                        leave.REJECTED_DATE.toString(),
+                        formatServerDate(leave.REJECTED_DATE.toString()),
                         leave.REMARK.toString()))
             }
         }
 
         Log.d("####", "transformLeaveData: ${listOfPending.size} ${listOfApproved.size}")
+    }
+
+    fun formatServerDate(dateString: String): String {
+        val formatter = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        val date = formatter.parse(dateString)
+
+        val newFormatter = SimpleDateFormat("MMM dd, yyyy HH:mm:ss")
+        return newFormatter.format(date)
     }
 
     private fun setPendingRecyclerView() {

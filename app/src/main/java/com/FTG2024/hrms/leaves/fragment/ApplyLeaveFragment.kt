@@ -14,10 +14,12 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.core.view.get
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.FTG2024.hrms.R
 import com.FTG2024.hrms.databinding.FragmentApplyLeaveBinding
+import com.FTG2024.hrms.databinding.MyaccountToolbarBinding
 import com.FTG2024.hrms.dialog.ProgressDialog
 import com.FTG2024.hrms.leaves.LeavesActivity
 import com.FTG2024.hrms.leaves.model.ApplyLeaveRequest
@@ -34,6 +36,8 @@ import java.util.Locale
 
 class ApplyLeaveFragment : Fragment() {
 
+    private lateinit var leavesTypeAdapter: ArrayAdapter<String>
+    private val SELECT_LEAVE_TYPE : String = "Select leave type"
     private lateinit var binding : FragmentApplyLeaveBinding
     private val viewModel: LeavesViewModel by activityViewModels()
     private lateinit var progressDialog: ProgressDialog
@@ -44,6 +48,7 @@ class ApplyLeaveFragment : Fragment() {
     private lateinit var reason : String
     private lateinit var leavesTypeIdMap : MutableMap<String, Int>
     private var halfLeaveSession : String = ""
+    private lateinit var leaveTypeList : MutableList<String>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -80,16 +85,15 @@ class ApplyLeaveFragment : Fragment() {
                     is Response.Success -> {
                         val leaveTypeResponse = response.data as LeaveTypeResponse
                         val list = mutableListOf<String>()
+                        leaveTypeList = mutableListOf<String>()
+                        list.add(SELECT_LEAVE_TYPE)
                         leavesTypeIdMap = mutableMapOf<String, Int>()
                         for (type in leaveTypeResponse.data) {
                             list.add(type.NAME)
+                            leaveTypeList.add(type.NAME)
                             leavesTypeIdMap[type.NAME] = type.ID
                         }
-                        val leavesTypeAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, list)
-                        //leavesTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-                        binding.spinnerApplyLeaveLeaveType.adapter = leavesTypeAdapter
-                        binding.spinnerApplyLeaveMode.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, listOf("Full", "Half"))
+                        setTypeSpinner(list)
                         //progressDialog.dismiss()
                     }
                     is Response.Success -> {
@@ -116,11 +120,20 @@ class ApplyLeaveFragment : Fragment() {
         })
     }
 
+    private fun setTypeSpinner(list : MutableList<String>) {
+        Log.d("####", "setTypeSpinner: ${list[0]}")
+        leavesTypeAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, list)
+        binding.spinnerApplyLeaveLeaveType.adapter = leavesTypeAdapter
+        binding.spinnerApplyLeaveMode.adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, listOf("Full", "Half"))
+    }
+
     @SuppressLint("ResourceAsColor")
     private fun setListeners() {
         binding.buttonApplyLeaveSubmit.setOnClickListener {
             val reasonText = binding.editTextTextMultiLine.text.toString()
-            if (reasonText.isNullOrEmpty()) {
+            if (leavesTypeAdapter.getItem(binding.spinnerApplyLeaveLeaveType.selectedItemPosition) == SELECT_LEAVE_TYPE) {
+                showToast("Please select leave type")
+            } else if (reasonText.isNullOrEmpty()) {
                 showToast("Please enter reason")
             } else {
                 reason = reasonText
@@ -140,6 +153,9 @@ class ApplyLeaveFragment : Fragment() {
 
         binding.spinnerApplyLeaveLeaveType.onItemSelectedListener = object :  AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
+                if (!parent.getItemAtPosition(position).toString().equals(SELECT_LEAVE_TYPE)) {
+                    setTypeSpinner(leaveTypeList)
+                }
                 leaveType = parent.getItemAtPosition(position).toString()
                 Log.d("####", "onItemSelected: $leaveType")
             }

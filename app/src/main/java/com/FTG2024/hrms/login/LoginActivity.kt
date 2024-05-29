@@ -87,7 +87,6 @@ class LoginActivity : BaseActivity() {
                         val loginResponse = response.data as LoginResponse
                         if (loginResponse.code == 200) {
                             addListInSharedPref(loginResponse.data)
-                            //navigateToDashBoard(loginResponse.data)
                             loginViewModel.getEmployeeProfile()
                         } else if (loginResponse.code == 304) {
                             showToast(loginResponse.message)

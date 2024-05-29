@@ -8,4 +8,5 @@ data class LeavesApproval(
     var remark: String,
     val status:String,
     val leaveId: Int,
-    val approvedBy: String)
+    val approvedBy: String,
+    val reason : String)

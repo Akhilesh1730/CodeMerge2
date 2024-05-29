@@ -1,6 +1,8 @@
 package com.FTG2024.hrms.base
 
 import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.net.ConnectivityManager
@@ -172,6 +174,18 @@ open class BaseActivity : AppCompatActivity() {
         }
 
         return isGpsEnabled
+    }
+
+     fun showGPSSettingsDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Enable GPS")
+        builder.setMessage("GPS is required for this app. Please enable GPS.")
+        builder.setPositiveButton("Settings") { dialog: DialogInterface, which: Int ->
+            val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+            startActivity(intent)
+        }
+        builder.setNegativeButton("Cancel", null)
+        builder.show()
     }
 
     fun isNetworkEnabled(context: Context) : Boolean {

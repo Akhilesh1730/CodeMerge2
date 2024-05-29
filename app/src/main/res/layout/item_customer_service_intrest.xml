@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/card_background"
+    android:paddingHorizontal="16dp"
+    android:layout_marginVertical="10dp"
+    android:layout_marginHorizontal="7dp"
+    android:paddingTop="11dp"
+    android:textSize="18sp">
+
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/serviceNameEditTextView"
+            android:layout_width="0dp"
+            android:fontFamily="@font/poppins"
+            android:layout_weight="15"
+            android:textStyle="bold"
+            android:textSize="21dp"
+            android:text="Gold Loan"
+            android:layout_height="wrap_content"/>
+
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/DateTextView"
+            android:layout_width="wrap_content"
+            android:text="27 Jan.2024"
+            android:fontFamily="@font/poppins"
+            android:gravity="end"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+
+
+
+
+
+
+
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/descriptionEdittext"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="DESCRIPTION"
+            android:textAlignment="viewStart"
+            android:fontFamily="@font/poppins"
+            android:textSize="14dp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/amountEditText"
+            app:layout_constraintVertical_bias="0"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_weight="1"/>
+
+        <TextView
+            android:id="@+id/amountEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Rs.50000.00"
+            android:layout_gravity="end"
+            android:gravity="end"
+            android:fontFamily="@font/poppins"
+            android:textSize="22dp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+
+        <TextView
+            android:id="@+id/chngeStatus"
+            android:layout_width="wrap_content"
+            android:fontFamily="@font/poppins"
+            android:layout_weight="1"
+            android:textStyle="bold"
+            android:layout_gravity="start"
+            android:gravity="start"
+            android:textSize="20dp"
+            android:textColor="@color/primary"
+            android:text="Change Status"
+            android:layout_height="wrap_content"/>
+
+        <TextView
+            android:id="@+id/openEditDialog"
+            android:layout_width="0dp"
+            android:fontFamily="@font/poppins"
+            android:layout_weight="4"
+            android:textStyle="bold"
+            android:layout_gravity="end"
+            android:gravity="end"
+            android:textSize="20dp"
+            android:textColor="@color/primary"
+            android:text="Edit"
+            android:layout_height="wrap_content"/>
+
+
+
+    </LinearLayout>
+
+</LinearLayout>
