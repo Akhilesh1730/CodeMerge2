@@ -150,7 +150,6 @@ class DashboardActivity : BaseActivity() {
             .setWaitForAccurateLocation(true)
             .setMinUpdateIntervalMillis(2000)
             .setMaxUpdateDelayMillis(100).build()
-
         LocationServices.getFusedLocationProviderClient(applicationContext)
             .requestLocationUpdates(locationRequest, locationCallback, null)
 
